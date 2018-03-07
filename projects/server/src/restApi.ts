@@ -105,5 +105,17 @@ export function getRouter() {
     return res.json(hand);
   });
 
+  router.route("/hand/:handId").get(async (_req, res) => {
+    const hands = await HandModel.query()
+      .select()
+      .where("id", "=", _req.params.handId);
+    const hand = hands[0];
+    const game = await hand.$relatedQuery("game");
+    res.json({
+      ...hand,
+      game,
+    });
+  });
+
   return router;
 }

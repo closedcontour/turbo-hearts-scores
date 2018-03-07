@@ -1,4 +1,4 @@
-import { IBasicLeague, IGame, ILeague, IPlayer, ISeason, IHand } from "./api";
+import { convertWireHand, IBasicLeague, IGame, IHand, ILeague, IPlayer, ISeason } from "./api";
 
 export class Api {
   private baseUrl: string = "http://localhost:8999/api";
@@ -71,6 +71,13 @@ export class Api {
     return this.post(url, {}).then((hand: IHand) => {
       return hand;
     });
+  }
+
+  public async getHand(handId: string) {
+    const url = `${this.baseUrl}/hand/${handId}`;
+    const wireHand = await this.get(url);
+    // const game = await this.get
+    return convertWireHand(wireHand);
   }
 
   private post(url: string, content: any) {

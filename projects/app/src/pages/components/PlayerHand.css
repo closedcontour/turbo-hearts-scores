@@ -1,0 +1,6 @@
+.th-player-hand {
+    margin-bottom: 10px;
+
+    & .charges, & .took-specials, & .hearts {
+    }
+}

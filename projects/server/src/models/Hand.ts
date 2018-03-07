@@ -1,7 +1,19 @@
 import { Model } from "objection";
+import { join } from "path";
 
 export class HandModel extends Model {
   public static tableName = "Hand";
+
+  public static relationMappings = {
+    game: {
+      relation: Model.HasOneRelation,
+      modelClass: join(__dirname, "Game"),
+      join: {
+        from: "Hand.gameId",
+        to: "Game.id",
+      },
+    },
+  };
 
   public readonly id: number;
   public readonly gameId: number;

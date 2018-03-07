@@ -87,6 +87,15 @@ export function getRouter() {
     return res.json(game);
   });
 
+  router.route("/game/:gameId").patch(async (_req, res) => {
+    const gameRequest = _req.body as Partial<GameModel>;
+    const game = await GameModel.query().patchAndFetch({
+      id: _req.params.gameId,
+      ...gameRequest,
+    });
+    return res.json(game);
+  });
+
   router.route("/game/:gameId/add-hand").post(async (_req, res) => {
     const handRequest = _req.body as Partial<HandModel>;
     const hand = await HandModel.query().insertAndFetch({

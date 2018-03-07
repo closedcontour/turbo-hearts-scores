@@ -1,5 +1,6 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
+import { IGame } from "../api/api";
 import { Api } from "../api/transport";
 
 interface GamePageProps extends RouteComponentProps<{ gameId: string }> {
@@ -8,11 +9,13 @@ interface GamePageProps extends RouteComponentProps<{ gameId: string }> {
 
 interface GamePageState {
   loading: boolean;
+  game: IGame | undefined;
 }
 
 export class GamePage extends React.Component<GamePageProps, GamePageState> {
   public state: GamePageState = {
     loading: false,
+    game: undefined,
   };
 
   public render() {

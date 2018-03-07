@@ -5,7 +5,6 @@ import * as http from "http";
 import * as Knex from "knex";
 import { Model } from "objection";
 import * as path from "path";
-import { info } from "./log";
 import { getRouter } from "./restApi";
 
 const assetDir = path.join(__dirname, "../assets");
@@ -24,6 +23,15 @@ Model.knex(knex);
 const app = express();
 const server = http.createServer(app);
 
+app.use((_req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With",
+  );
+  next();
+});
+
 app.use(express.static(assetDir));
 app.use("/api", bodyParser.urlencoded({ extended: true }));
 app.use("/api", bodyParser.json());
@@ -40,5 +48,5 @@ app.use("/", (req, res, next) => {
 
 // start our server
 server.listen(process.env.PORT || 8999, () => {
-  info(`Server started on port ${server.address().port} :)`);
+  console.log(`Server started on port ${server.address().port} :)`);
 });

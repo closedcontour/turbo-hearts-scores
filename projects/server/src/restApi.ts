@@ -14,6 +14,13 @@ export function getRouter() {
     res.json(player);
   });
 
+  router.route("/players").get(async (_req, res) => {
+    const players = await PlayerModel.query()
+      .select()
+      .orderBy("id", "asc");
+    res.json(players);
+  });
+
   router.route("/leagues").get((_req, res) => {
     LeagueModel.query()
       .select()
@@ -23,7 +30,7 @@ export function getRouter() {
       });
   });
 
-  router.route("/leagues").post((_req, res) => {
+  router.route("/league").post((_req, res) => {
     LeagueModel.query()
       .insertAndFetch({ name: _req.body.name })
       .then(league => {
@@ -54,6 +61,15 @@ export function getRouter() {
       });
   });
 
+  router.route("/league/:leagueId/add-season").post(async (_req, res) => {
+    const seasonRequest = _req.body as Partial<SeasonModel>;
+    const game = await SeasonModel.query().insertAndFetch({
+      leagueId: _req.params.leagueId,
+      ...seasonRequest,
+    });
+    return res.json(game);
+  });
+
   router.route("/league/:leagueId/add-player").post(async (_req, res) => {
     await PlayerLeagueModel.query().insert({
       leagueId: _req.params.leagueId,
@@ -62,7 +78,7 @@ export function getRouter() {
     return res.json(true);
   });
 
-  router.route("/season/:seasonId/create-game").post(async (_req, res) => {
+  router.route("/season/:seasonId/add-game").post(async (_req, res) => {
     const gameRequest = _req.body as Partial<GameModel>;
     const game = await GameModel.query().insertAndFetch({
       seasonId: _req.params.seasonId,
@@ -71,7 +87,7 @@ export function getRouter() {
     return res.json(game);
   });
 
-  router.route("/season/:seasonId/game/:gameId/add-hand").post(async (_req, res) => {
+  router.route("/game/:gameId/add-hand").post(async (_req, res) => {
     const handRequest = _req.body as Partial<HandModel>;
     const hand = await HandModel.query().insertAndFetch({
       gameId: _req.params.gameId,

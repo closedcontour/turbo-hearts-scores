@@ -12,7 +12,6 @@ export const up = (knex: Knex) =>
       table.unique(["name"]);
     })
     .createTable("PlayerLeague", table => {
-      table.increments("id").primary();
       table
         .integer("leagueId")
         .unsigned()
@@ -23,6 +22,7 @@ export const up = (knex: Knex) =>
         .unsigned()
         .references("id")
         .inTable("Player");
+      table.primary(["leagueId", "playerId"]);
     })
     .createTable("Season", table => {
       table.increments("id").primary();

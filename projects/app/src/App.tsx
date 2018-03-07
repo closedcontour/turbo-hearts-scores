@@ -1,64 +1,34 @@
-import { GameList, getGameIdFromPathname, getUrlForGameId } from "@turbo-hearts-scores/shared";
-import * as Cookies from "js-cookie";
-import * as qs from "qs";
+import { createBrowserHistory } from "history";
 import * as React from "react";
-import { GamePage } from "./pages/GamePage";
-import { JoinGamePage } from "./pages/JoinGamePage";
-import { SetUserPage } from "./pages/SetUserPage";
+import { Route, RouteComponentProps, Router } from "react-router-dom";
+import { Api } from "./api/transport";
+import { HomePage } from "./pages/HomePage";
+import { LeaguePage } from "./pages/LeaguePage";
+import { SeasonPage } from "./pages/SeasonPage";
 
-export interface AppState {
-  user: string | undefined;
-  gameId: number | undefined;
-  activeGames: GameList | undefined;
+export interface AppProps {
+  api: Api;
 }
 
-export class App extends React.Component<{}, AppState> {
-  public state: AppState = {
-    user: Cookies.get("user"),
-    gameId: getGameIdFromPathname(window.location.pathname),
-    activeGames: undefined,
-  };
-
-  public async componentWillMount() {
-    if (!this.state.gameId) {
-      const fetchResponse = await fetch(window.location.origin + "/api/games");
-      const activeGames: GameList = await fetchResponse.json();
-      this.setState({ activeGames });
-    }
-  }
-
+export class App extends React.Component<AppProps, {}> {
   public render() {
-    const query = qs.parse(window.location.search.slice(1));
-    const user = query.user || this.state.user;
-
-    if (!user) {
-      return <SetUserPage setUser={this.handleSetUser} />;
-    }
-
-    if (this.state.gameId === undefined) {
-      if (this.state.activeGames !== undefined) {
-        return <JoinGamePage activeGames={this.state.activeGames} />;
-      }
-      return <div className="">Loading games</div>;
-    }
-
-    if (query.test) {
-      const url = getUrlForGameId(this.state.gameId);
-      return (
+    const homePage = (props: RouteComponentProps<any>) => (
+      <HomePage {...props} api={this.props.api} />
+    );
+    const leaguePage = (props: RouteComponentProps<any>) => (
+      <LeaguePage {...props} api={this.props.api} />
+    );
+    const seasonPage = (props: RouteComponentProps<any>) => (
+      <SeasonPage {...props} api={this.props.api} />
+    );
+    return (
+      <Router history={createBrowserHistory()}>
         <div>
-          <iframe className="test-frame" src={url + "?user=TS"} />
-          <iframe className="test-frame" src={url + "?user=DC"} />
-          <iframe className="test-frame" src={url + "?user=TW"} />
-          <iframe className="test-frame" src={url + "?user=JC"} />
+          <Route exact={true} path="/" render={homePage} />
+          <Route exact={true} path="/league/:leagueId" render={leaguePage} />
+          <Route exact={true} path="/season/:seasonId" render={seasonPage} />
         </div>
-      );
-    }
-
-    return <GamePage gameId={this.state.gameId} player={user} />;
+      </Router>
+    );
   }
-
-  private handleSetUser = (user: string) => {
-    Cookies.set("user", user, { expires: 365 });
-    this.setState({ user });
-  };
 }

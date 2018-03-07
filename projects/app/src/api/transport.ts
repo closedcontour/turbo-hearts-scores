@@ -1,4 +1,4 @@
-import { IBasicLeague, ILeague, IPlayer, ISeason } from "./api";
+import { IBasicLeague, IGame, ILeague, IPlayer, ISeason, IHand } from "./api";
 
 export class Api {
   private baseUrl: string = "http://localhost:8999/api";
@@ -56,6 +56,20 @@ export class Api {
     const url = `${this.baseUrl}/league/${leagueId}/add-season`;
     return this.post(url, { name }).then((season: ISeason) => {
       return season;
+    });
+  }
+
+  public createGame(seasonId: string) {
+    const url = `${this.baseUrl}/season/${seasonId}/add-game`;
+    return this.post(url, {}).then((game: IGame) => {
+      return game;
+    });
+  }
+
+  public createHand(gameId: string) {
+    const url = `${this.baseUrl}/game/${gameId}/add-hand`;
+    return this.post(url, {}).then((hand: IHand) => {
+      return hand;
     });
   }
 

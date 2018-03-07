@@ -3,6 +3,14 @@ export interface IPlayer {
   name: string;
 }
 
+export interface IHand {
+  id: number;
+}
+
+export interface IGame {
+  id: number;
+}
+
 export interface ISeason {
   id: number;
   name: string;

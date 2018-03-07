@@ -22,7 +22,10 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
 
   public render() {
     return (
-      <div className="th-league">{this.state.season && <h1>{this.state.season.name}</h1>}</div>
+      <div className="th-season">
+        {this.state.season && <h1>{this.state.season.name}</h1>}
+        <button onClick={this.handleNewGame}>New Game</button>
+      </div>
     );
   }
 
@@ -36,4 +39,12 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
     const season = await this.props.api.fetchSeason(seasonId);
     this.setState({ loading: false, season });
   }
+
+  private handleNewGame = async () => {
+    const seasonId = this.props.match.params.seasonId;
+    this.setState({ loading: true });
+    const game = await this.props.api.createGame(seasonId);
+    this.props.history.push(`/game/${game.id}`);
+    this.setState({ loading: false });
+  };
 }

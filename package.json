@@ -1,0 +1,24 @@
+{
+  "name": "turbo-hearts-scores",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "lerna run build",
+    "lint": "lerna run lint"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.16.8",
+    "lerna": "^2.1.2",
+    "nodemon": "^1.17.1",
+    "parcel-bundler": "^1.3.1",
+    "prettier": "^1.9.2",
+    "tslint": "^5.8.0",
+    "tslint-config-prettier": "^1.6.0",
+    "tslint-plugin-prettier": "^1.3.0",
+    "tslint-react": "^3.2.0",
+    "typescript": "^2.6.2"
+  },
+  "workspaces": [
+    "projects/*"
+  ]
+}

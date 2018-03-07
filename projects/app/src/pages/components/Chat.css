@@ -1,0 +1,30 @@
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  max-height: 180px;
+  width: 200px;
+}
+
+.chat > .chat-history {
+  flex: 1 1 auto;
+  overflow-y: auto;
+
+  & > .event-row {
+    color: var(--base05);
+  }
+}
+
+.chat > .chat-input {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: baseline;
+
+  & > .player-name {
+    flex: 0 0 auto;
+  }
+
+  & > input {
+    flex: 1 1 auto;
+  }
+}

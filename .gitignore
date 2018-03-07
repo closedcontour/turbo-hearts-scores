@@ -1,0 +1,16 @@
+.idea/
+.vscode/
+.DS_Store
+build/
+node_modules/
+config-schema.json
+npm-debug.log
+lib/
+_book
+.cache/
+dist/
+lerna-debug.log
+*.sqlite3
+
+projects/server/assets
+projects/server/bin

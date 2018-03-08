@@ -6,6 +6,7 @@ Theme currently duplicated in .postcssrc.
 @import "./themes/base16-harmonic16-light.css";
 
 @import "./reset.css";
+@import "./pages/HandPage.css";
 @import "./pages/components/PlayerHand.css";
 @import "./pages/components/Card.css";
 
@@ -13,7 +14,7 @@ body {
     background: var(--base00);
     color: var(--base06);
     font-family: monospace;
-    font-size: 32px;
+    font-size: 19px;
 }
 
 a {
@@ -34,4 +35,11 @@ a {
 
 ._spades {
     color: var(--base07);
+}
+
+.th-page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }

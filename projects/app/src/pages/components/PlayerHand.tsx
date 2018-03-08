@@ -1,9 +1,11 @@
+import classNames = require("classnames");
 import * as React from "react";
 import { IPlayerHand } from "../../api/api";
 import { Card } from "./Card";
 
 interface PlayerHandProps {
   hand: IPlayerHand;
+  score: number;
   onChange(delta: Partial<IPlayerHand> & Pick<IPlayerHand, "index">): void;
 }
 
@@ -15,12 +17,13 @@ export class PlayerHand extends React.Component<PlayerHandProps, {}> {
         {this.renderCharges()}
         {this.renderTookSpecials()}
         {this.renderHearts()}
+        {this.renderScore()}
       </div>
     );
   }
 
   private renderName() {
-    return null;
+    return "Placerholder Name";
   }
 
   // tslint:disable:jsx-no-lambda
@@ -28,7 +31,7 @@ export class PlayerHand extends React.Component<PlayerHandProps, {}> {
     const { hand } = this.props;
     return (
       <div className="charges">
-        <h5>Charges</h5>
+        <h5>Charged</h5>
         <Card
           rank="Q"
           suit="SPADES"
@@ -85,12 +88,24 @@ export class PlayerHand extends React.Component<PlayerHandProps, {}> {
   }
 
   private renderHearts() {
-    const h = this.props.hand.hearts;
-    const s = h === 1 ? "♥" : "♥s";
-    return (
-      <div className="hearts">
-        {h} {s}
-      </div>
-    );
+    const { hand } = this.props;
+    const hearts = [];
+    for (let i = 0; i <= 13; i++) {
+      hearts.push(
+        <span
+          key={i}
+          className={classNames("heart-count", { active: i <= hand.hearts })}
+          onClick={() => this.props.onChange({ index: hand.index, hearts: i })}
+        >
+          {i !== 0 && "—"}
+          {i}
+        </span>,
+      );
+    }
+    return <div className="hearts _hearts">{hearts}♥</div>;
+  }
+
+  private renderScore() {
+    return <div className="score">{this.props.score}</div>;
   }
 }

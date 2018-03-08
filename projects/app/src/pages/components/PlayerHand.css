@@ -1,6 +1,31 @@
 .th-player-hand {
     margin-bottom: 10px;
+    flex-grow: 1;
+    border-top: 1px solid black;
 
-    & .charges, & .took-specials, & .hearts {
+    & h5 {
+        line-height: 30px;
+        width: 40%;
+        color: #aaa;
+    }
+
+    & .charges, & .took-specials {
+        display: flex;
+
+        & .th-card {
+            flex-grow: 1;
+        }
+    }
+
+    & .heart-count {
+        &.active {
+            font-weight: 800;
+            background: #ccc;
+        }
+    }
+
+    & .score {
+        text-align: center;
+        font-size: 30px;
     }
 }

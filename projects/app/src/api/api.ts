@@ -95,7 +95,7 @@ export interface IWireHand {
 export function convertWireHand(wireHand: IWireHand): IHand {
   return {
     id: wireHand.id,
-    pass: wireHand.pass,
+    pass: wireHand.pass || "LEFT",
     // game
     playerHands: [
       {

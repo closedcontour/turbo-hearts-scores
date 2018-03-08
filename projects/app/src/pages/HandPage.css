@@ -1,0 +1,15 @@
+.th-hand {
+
+    & .bottom {
+        height: 80px;
+        border-top: 1px solid black;
+
+        &.valid {
+            background: #15B371;
+        }
+
+        &.invalid {
+            background: #F55656;
+        }
+    }
+}

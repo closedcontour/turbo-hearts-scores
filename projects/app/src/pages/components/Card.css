@@ -1,6 +1,8 @@
 .th-card {
     display: inline-block;
     margin-right: 10px;
+    height: 30px;
+    line-height: 30px;
 
     &.active {
         font-weight: 800;

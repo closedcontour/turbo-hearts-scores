@@ -1,8 +1,3 @@
-export const Qs = "Q♠";
-export const Jd = "J♦";
-export const Ah = "A♥";
-export const Tc = "10♣";
-
 export interface IPlayer {
   id: number;
   name: string;
@@ -17,6 +12,7 @@ export interface IHand {
 }
 
 export interface IPlayerHand {
+  index: number;
   //   player: IPlayer;
   chargedTc: boolean;
   chargedJd: boolean;
@@ -103,6 +99,7 @@ export function convertWireHand(wireHand: IWireHand): IHand {
     // game
     playerHands: [
       {
+        index: 0,
         chargedAh: wireHand.p1ChargeAh,
         chargedTc: wireHand.p1ChargeTc,
         chargedJd: wireHand.p1ChargeJd,
@@ -113,6 +110,7 @@ export function convertWireHand(wireHand: IWireHand): IHand {
         hearts: wireHand.p1Hearts,
       },
       {
+        index: 1,
         chargedAh: wireHand.p2ChargeAh,
         chargedTc: wireHand.p2ChargeTc,
         chargedJd: wireHand.p2ChargeJd,
@@ -123,6 +121,7 @@ export function convertWireHand(wireHand: IWireHand): IHand {
         hearts: wireHand.p2Hearts,
       },
       {
+        index: 2,
         chargedAh: wireHand.p3ChargeAh,
         chargedTc: wireHand.p3ChargeTc,
         chargedJd: wireHand.p3ChargeJd,
@@ -133,6 +132,7 @@ export function convertWireHand(wireHand: IWireHand): IHand {
         hearts: wireHand.p3Hearts,
       },
       {
+        index: 3,
         chargedAh: wireHand.p4ChargeAh,
         chargedTc: wireHand.p4ChargeTc,
         chargedJd: wireHand.p4ChargeJd,

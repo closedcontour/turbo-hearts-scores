@@ -1,0 +1,9 @@
+.th-card {
+    display: inline-block;
+    margin-right: 10px;
+
+    &.active {
+        font-weight: 800;
+        background: #ccc;
+    }
+}

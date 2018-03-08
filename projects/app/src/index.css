@@ -7,11 +7,13 @@ Theme currently duplicated in .postcssrc.
 
 @import "./reset.css";
 @import "./pages/components/PlayerHand.css";
+@import "./pages/components/Card.css";
 
 body {
     background: var(--base00);
     color: var(--base06);
     font-family: monospace;
+    font-size: 32px;
 }
 
 a {

@@ -32,9 +32,21 @@ export class HandPage extends React.Component<HandPageProps, HandPageState> {
     this.fetchHand();
   }
 
-  private renderPlayerHand(playerHand: IPlayerHand) {
-    return <PlayerHand hand={playerHand} />;
-  }
+  private applyDelta = (delta: Partial<IPlayerHand> & Pick<IPlayerHand, "index">) => {
+    const handToChange = this.state.hand!.playerHands[delta.index];
+    const newPlayerHand = { ...handToChange, ...delta };
+    const newPlayerHandArray = this.state.hand!.playerHands.slice();
+    newPlayerHandArray[delta.index] = newPlayerHand;
+    const newHand: IHand = {
+      ...this.state.hand!,
+      playerHands: newPlayerHandArray,
+    };
+    this.setState({ hand: newHand });
+  };
+
+  private renderPlayerHand = (playerHand: IPlayerHand) => {
+    return <PlayerHand hand={playerHand} onChange={this.applyDelta} />;
+  };
 
   private async fetchHand() {
     const handId = this.props.match.params.handId;

@@ -8,6 +8,7 @@
     "lint": "tslint --fix 'src/**/*.ts*'"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.3",
     "@types/history": "^4.6.2",
     "@types/js-cookie": "^2.1.0",
     "@types/qs": "^6.5.1",
@@ -26,6 +27,7 @@
   },
   "dependencies": {
     "@turbo-hearts-scores/shared": "*",
+    "classnames": "^2.2.5",
     "history": "^4.7.2",
     "js-cookie": "^2.2.0",
     "qs": "^6.5.1",

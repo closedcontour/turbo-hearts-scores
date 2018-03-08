@@ -1,7 +1,7 @@
 import classNames = require("classnames");
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-import { IHand, IPlayerHand, Pass } from "../api/api";
+import { IHand, IPlayer, IPlayerHand, Pass } from "../api/api";
 import { Api } from "../api/transport";
 import { PlayerHand } from "./components/PlayerHand";
 
@@ -14,13 +14,13 @@ interface HandPageState {
   hand: IHand | undefined;
 }
 
-interface HandResult {
+export interface HandResult {
   valid: boolean;
   invalidReasons: string[];
   scores: number[];
 }
 
-function getHandResult(hand?: IHand): HandResult {
+export function getHandResult(hand?: IHand): HandResult {
   if (hand === undefined) {
     return {
       valid: false,
@@ -137,7 +137,7 @@ export class HandPage extends React.Component<HandPageProps, HandPageState> {
         {this.state.hand && this.state.hand.pass}
         {this.state.hand &&
           this.state.hand.playerHands.map((playerHand, i) =>
-            this.renderPlayerHand(playerHand, result.scores[i]),
+            this.renderPlayerHand(playerHand, this.state.hand!.players[i], result.scores[i]),
           )}
         {this.renderBottom(result)}
       </div>
@@ -149,8 +149,16 @@ export class HandPage extends React.Component<HandPageProps, HandPageState> {
   }
 
   private renderBottom(result: HandResult) {
+    const onClick = !result.valid
+      ? undefined
+      : () => {
+          this.finishHand();
+        };
     return (
-      <div className={classNames("bottom", { valid: result.valid, invalid: !result.valid })}>
+      <div
+        onClick={onClick}
+        className={classNames("bottom", { valid: result.valid, invalid: !result.valid })}
+      >
         {result.invalidReasons.join(" ")}
         {result.valid && <div>👍</div>}
       </div>
@@ -169,8 +177,10 @@ export class HandPage extends React.Component<HandPageProps, HandPageState> {
     this.setState({ hand: newHand });
   };
 
-  private renderPlayerHand = (playerHand: IPlayerHand, score: number) => {
-    return <PlayerHand hand={playerHand} onChange={this.applyDelta} score={score || 0} />;
+  private renderPlayerHand = (playerHand: IPlayerHand, player: IPlayer, score: number) => {
+    return (
+      <PlayerHand player={player} hand={playerHand} onChange={this.applyDelta} score={score || 0} />
+    );
   };
 
   private async fetchHand() {
@@ -178,5 +188,12 @@ export class HandPage extends React.Component<HandPageProps, HandPageState> {
     this.setState({ loading: true });
     const hand = await this.props.api.fetchHand(handId);
     this.setState({ loading: false, hand });
+  }
+
+  private async finishHand() {
+    const handId = this.props.match.params.handId;
+    this.setState({ loading: true });
+    await this.props.api.finishHand(handId, this.state.hand!);
+    this.setState({ loading: false });
   }
 }

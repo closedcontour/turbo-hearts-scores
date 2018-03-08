@@ -101,6 +101,7 @@ export function getRouter() {
     ]);
     const season = ((await game.$relatedQuery("season")) as any) as SeasonModel;
     const league = await season.$relatedQuery("league");
+    const hands = await game.$relatedQuery("hands");
     return res.json({
       id: game.id,
       seasonId: game.seasonId,
@@ -109,6 +110,7 @@ export function getRouter() {
         ...season,
         league,
       },
+      hands,
     });
   });
 
@@ -132,11 +134,24 @@ export function getRouter() {
       .select()
       .where("id", "=", _req.params.handId);
     const hand = hands[0];
-    const game = await hand.$relatedQuery("game");
+    const game = ((await hand.$relatedQuery("game")) as any) as GameModel;
+    const players = await Promise.all([
+      game.$relatedQuery("p1"),
+      game.$relatedQuery("p2"),
+      game.$relatedQuery("p3"),
+      game.$relatedQuery("p4"),
+    ]);
     res.json({
       ...hand,
       game,
+      players,
     });
+  });
+
+  router.route("/hand/:handId").patch(async (_req, res) => {
+    const handRequest = _req.body as Partial<HandModel>;
+    const hand = await HandModel.query().patchAndFetchById(_req.params.handId, handRequest);
+    return res.json(hand);
   });
 
   return router;

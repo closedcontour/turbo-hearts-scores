@@ -1,9 +1,10 @@
 import classNames = require("classnames");
 import * as React from "react";
-import { IPlayerHand } from "../../api/api";
+import { IPlayer, IPlayerHand } from "../../api/api";
 import { Card } from "./Card";
 
 interface PlayerHandProps {
+  player: IPlayer;
   hand: IPlayerHand;
   score: number;
   onChange(delta: Partial<IPlayerHand> & Pick<IPlayerHand, "index">): void;
@@ -23,7 +24,7 @@ export class PlayerHand extends React.Component<PlayerHandProps, {}> {
   }
 
   private renderName() {
-    return "Placerholder Name";
+    return this.props.player.name;
   }
 
   // tslint:disable:jsx-no-lambda

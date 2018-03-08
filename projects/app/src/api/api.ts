@@ -9,6 +9,7 @@ export interface IHand {
   id: number;
   pass: Pass;
   playerHands: IPlayerHand[];
+  players: IPlayer[];
 }
 
 export interface IPlayerHand {
@@ -29,6 +30,7 @@ export interface IGame {
   id: number;
   players: Array<IPlayer | null | undefined>;
   season: ISeason;
+  hands: IHand[];
 }
 
 export interface ISeason {
@@ -52,6 +54,7 @@ export interface IWireHand {
   gameId: number;
 
   pass: Pass;
+  players: IPlayer[];
 
   p1ChargeJd: boolean;
   p2ChargeJd: boolean;
@@ -98,6 +101,7 @@ export function convertWireHand(wireHand: IWireHand): IHand {
   return {
     id: wireHand.id,
     pass: wireHand.pass || "LEFT",
+    players: wireHand.players,
     // game
     playerHands: [
       {

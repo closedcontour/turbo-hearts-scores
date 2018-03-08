@@ -1,0 +1,8 @@
+.th-hand-result {
+    display: flex;
+
+    & .score {
+        flex-grow: 1;
+        display: inline-block;
+    }
+}

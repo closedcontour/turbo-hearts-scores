@@ -1,7 +1,8 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-import { IGame, IPlayer } from "../api/api";
+import { IGame, IHand, IPlayer } from "../api/api";
 import { Api } from "../api/transport";
+import { HandResult } from "./components/HandResult";
 import { PlayerChooser } from "./components/PlayerChooser";
 
 interface GamePageProps extends RouteComponentProps<{ gameId: string }> {
@@ -42,10 +43,15 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
     return (
       <div className="th-game">
         Game {this.props.match.params.gameId}
+        <div className="hand-scores">{this.state.game!.hands.map(this.renderHand)}</div>
         <button onClick={this.addHand}>Add Hand</button>
       </div>
     );
   }
+
+  private renderHand = (hand: IHand) => {
+    return <HandResult hand={hand} />;
+  };
 
   private renderPlayerChooser() {
     if (this.state.loading || !this.state.leaguePlayers || !this.state.game) {

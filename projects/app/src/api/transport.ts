@@ -1,4 +1,14 @@
-import { convertWireHand, IBasicLeague, IGame, IHand, ILeague, IPlayer, ISeason } from "./api";
+import {
+  convertWireHand,
+  IBasicLeague,
+  IGame,
+  IHand,
+  ILeague,
+  IPlayer,
+  IPlayerHand,
+  ISeason,
+  IWireHand,
+} from "./api";
 
 export class Api {
   private baseUrl: string = "http://localhost:8999/api";
@@ -76,13 +86,13 @@ export class Api {
   public async fetchHand(handId: string) {
     const url = `${this.baseUrl}/hand/${handId}`;
     const wireHand = await this.get(url);
-    // const game = await this.get
     return convertWireHand(wireHand);
   }
 
   public async fetchGame(gameId: string) {
     const url = `${this.baseUrl}/game/${gameId}`;
     const wireGame = await this.get(url);
+    wireGame.hands = (wireGame.hands as IWireHand[]).map(convertWireHand);
     return wireGame as IGame;
   }
 
@@ -96,6 +106,54 @@ export class Api {
       p4Id: playerIds[3],
     });
     return wireGame;
+  }
+
+  public async finishHand(handId: string, hand: IHand) {
+    const url = `${this.baseUrl}/hand/${handId}`;
+    const wireHand = await this.patch(url, {
+      id: handId,
+      pass: hand.pass,
+      p1ChargeJd: hand.playerHands[0].chargedJd,
+      p2ChargeJd: hand.playerHands[1].chargedJd,
+      p3ChargeJd: hand.playerHands[2].chargedJd,
+      p4ChargeJd: hand.playerHands[3].chargedJd,
+
+      p1ChargeTc: hand.playerHands[0].chargedTc,
+      p2ChargeTc: hand.playerHands[1].chargedTc,
+      p3ChargeTc: hand.playerHands[2].chargedTc,
+      p4ChargeTc: hand.playerHands[3].chargedTc,
+
+      p1ChargeAh: hand.playerHands[0].chargedAh,
+      p2ChargeAh: hand.playerHands[1].chargedAh,
+      p3ChargeAh: hand.playerHands[2].chargedAh,
+      p4ChargeAh: hand.playerHands[3].chargedAh,
+
+      p1ChargeQs: hand.playerHands[0].chargedQs,
+      p2ChargeQs: hand.playerHands[1].chargedQs,
+      p3ChargeQs: hand.playerHands[2].chargedQs,
+      p4ChargeQs: hand.playerHands[3].chargedQs,
+
+      p1TookJd: hand.playerHands[0].tookJd,
+      p2TookJd: hand.playerHands[1].tookJd,
+      p3TookJd: hand.playerHands[2].tookJd,
+      p4TookJd: hand.playerHands[3].tookJd,
+
+      p1TookQs: hand.playerHands[0].tookQs,
+      p2TookQs: hand.playerHands[1].tookQs,
+      p3TookQs: hand.playerHands[2].tookQs,
+      p4TookQs: hand.playerHands[3].tookQs,
+
+      p1TookTc: hand.playerHands[0].tookTc,
+      p2TookTc: hand.playerHands[1].tookTc,
+      p3TookTc: hand.playerHands[2].tookTc,
+      p4TookTc: hand.playerHands[3].tookTc,
+
+      p1Hearts: hand.playerHands[0].hearts,
+      p2Hearts: hand.playerHands[1].hearts,
+      p3Hearts: hand.playerHands[2].hearts,
+      p4Hearts: hand.playerHands[3].hearts,
+    });
+    return wireHand;
   }
 
   private post(url: string, content: any) {

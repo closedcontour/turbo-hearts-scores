@@ -2,6 +2,7 @@ import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { ILeague, IPlayer, ISeason } from "../api/api";
 import { Api } from "../api/transport";
+import { PlayerChooser } from "./components/PlayerChooser";
 
 interface LeaguePageProps extends RouteComponentProps<{ leagueId: string }> {
   api: Api;
@@ -12,7 +13,7 @@ interface LeaguePageState {
   league: ILeague | undefined;
   players: IPlayer[];
   newSeason: string;
-  playerToAdd: string;
+  playerToAdd: IPlayer | undefined;
 }
 
 export class LeaguePage extends React.Component<LeaguePageProps, LeaguePageState> {
@@ -21,7 +22,7 @@ export class LeaguePage extends React.Component<LeaguePageProps, LeaguePageState
     league: undefined,
     players: [],
     newSeason: "",
-    playerToAdd: "",
+    playerToAdd: undefined,
   };
 
   public render() {
@@ -49,15 +50,12 @@ export class LeaguePage extends React.Component<LeaguePageProps, LeaguePageState
   private renderAddPlayer() {
     return (
       <div>
-        <select onChange={this.handlePlayerChooserChange}>
-          <option value="">Choose Player</option>
-          {this.state.players.map(player => (
-            <option key={player.id} value={player.id}>
-              {player.name}
-            </option>
-          ))}
-        </select>
-        <button disabled={this.state.playerToAdd === ""} onClick={this.handleAddPlayer}>
+        <PlayerChooser
+          players={this.state.players}
+          selectedPlayer={this.state.playerToAdd}
+          onPlayerChanged={this.handlePlayerChooserChange}
+        />
+        <button disabled={this.state.playerToAdd === undefined} onClick={this.handleAddPlayer}>
           Add Player To League
         </button>
       </div>
@@ -94,8 +92,8 @@ export class LeaguePage extends React.Component<LeaguePageProps, LeaguePageState
     this.setState({ newSeason: event.target.value });
   };
 
-  private handlePlayerChooserChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    this.setState({ playerToAdd: event.target.value });
+  private handlePlayerChooserChange = (player: IPlayer | undefined) => {
+    this.setState({ playerToAdd: player });
   };
 
   private handleNewSeason = async () => {
@@ -108,7 +106,7 @@ export class LeaguePage extends React.Component<LeaguePageProps, LeaguePageState
 
   private handleAddPlayer = async () => {
     const leagueId = this.props.match.params.leagueId;
-    const playerId = this.state.playerToAdd;
+    const playerId = this.state.playerToAdd!.id.toString();
     this.setState({ loading: true });
     await this.props.api.addPlayerToLeague(leagueId, playerId);
     this.fetchLeague();

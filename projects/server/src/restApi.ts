@@ -53,6 +53,7 @@ export function getRouter() {
   });
 
   router.route("/season/:seasonId").get((_req, res) => {
+    // TODO: get league
     SeasonModel.query()
       .where("id", "=", _req.params.seasonId)
       .select()
@@ -87,12 +88,33 @@ export function getRouter() {
     return res.json(game);
   });
 
+  router.route("/game/:gameId").get(async (_req, res) => {
+    const games = await GameModel.query()
+      .select()
+      .where("id", "=", _req.params.gameId);
+    const game = games[0];
+    const players = await Promise.all([
+      game.$relatedQuery("p1"),
+      game.$relatedQuery("p2"),
+      game.$relatedQuery("p3"),
+      game.$relatedQuery("p4"),
+    ]);
+    const season = ((await game.$relatedQuery("season")) as any) as SeasonModel;
+    const league = await season.$relatedQuery("league");
+    return res.json({
+      id: game.id,
+      seasonId: game.seasonId,
+      players,
+      season: {
+        ...season,
+        league,
+      },
+    });
+  });
+
   router.route("/game/:gameId").patch(async (_req, res) => {
     const gameRequest = _req.body as Partial<GameModel>;
-    const game = await GameModel.query().patchAndFetch({
-      id: _req.params.gameId,
-      ...gameRequest,
-    });
+    const game = await GameModel.query().patchAndFetchById(_req.params.gameId, gameRequest);
     return res.json(game);
   });
 

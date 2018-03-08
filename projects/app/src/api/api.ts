@@ -27,12 +27,14 @@ export interface IPlayerHand {
 
 export interface IGame {
   id: number;
-  players: IPlayer[];
+  players: Array<IPlayer | null | undefined>;
+  season: ISeason;
 }
 
 export interface ISeason {
   id: number;
   name: string;
+  league: IBasicLeague;
 }
 
 export interface IBasicLeague {

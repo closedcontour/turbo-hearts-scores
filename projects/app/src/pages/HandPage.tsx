@@ -176,7 +176,7 @@ export class HandPage extends React.Component<HandPageProps, HandPageState> {
   private async fetchHand() {
     const handId = this.props.match.params.handId;
     this.setState({ loading: true });
-    const hand = await this.props.api.getHand(handId);
+    const hand = await this.props.api.fetchHand(handId);
     this.setState({ loading: false, hand });
   }
 }

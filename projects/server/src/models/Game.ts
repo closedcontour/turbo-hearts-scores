@@ -13,6 +13,46 @@ export class GameModel extends Model {
         to: "Hand.gameId",
       },
     },
+    season: {
+      relation: Model.HasOneRelation,
+      modelClass: join(__dirname, "Season"),
+      join: {
+        from: "Game.seasonId",
+        to: "Season.id",
+      },
+    },
+    p1: {
+      relation: Model.HasOneRelation,
+      modelClass: join(__dirname, "Player"),
+      join: {
+        from: "Game.p1Id",
+        to: "Player.id",
+      },
+    },
+    p2: {
+      relation: Model.HasOneRelation,
+      modelClass: join(__dirname, "Player"),
+      join: {
+        from: "Game.p2Id",
+        to: "Player.id",
+      },
+    },
+    p3: {
+      relation: Model.HasOneRelation,
+      modelClass: join(__dirname, "Player"),
+      join: {
+        from: "Game.p3Id",
+        to: "Player.id",
+      },
+    },
+    p4: {
+      relation: Model.HasOneRelation,
+      modelClass: join(__dirname, "Player"),
+      join: {
+        from: "Game.p4Id",
+        to: "Player.id",
+      },
+    },
   };
 
   public readonly id: number;

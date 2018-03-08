@@ -73,11 +73,29 @@ export class Api {
     });
   }
 
-  public async getHand(handId: string) {
+  public async fetchHand(handId: string) {
     const url = `${this.baseUrl}/hand/${handId}`;
     const wireHand = await this.get(url);
     // const game = await this.get
     return convertWireHand(wireHand);
+  }
+
+  public async fetchGame(gameId: string) {
+    const url = `${this.baseUrl}/game/${gameId}`;
+    const wireGame = await this.get(url);
+    return wireGame as IGame;
+  }
+
+  public async startGame(gameId: string, playerIds: Array<string | null>) {
+    const url = `${this.baseUrl}/game/${gameId}`;
+    const wireGame = await this.patch(url, {
+      id: gameId,
+      p1Id: playerIds[0],
+      p2Id: playerIds[1],
+      p3Id: playerIds[2],
+      p4Id: playerIds[3],
+    });
+    return wireGame;
   }
 
   private post(url: string, content: any) {
@@ -87,6 +105,18 @@ export class Api {
         "content-type": "application/json",
       },
       method: "POST",
+    }).then(response => {
+      return response.json();
+    });
+  }
+
+  private patch(url: string, content: any) {
+    return fetch(url, {
+      body: JSON.stringify(content),
+      headers: {
+        "content-type": "application/json",
+      },
+      method: "PATCH",
     }).then(response => {
       return response.json();
     });

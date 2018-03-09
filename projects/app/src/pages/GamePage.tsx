@@ -63,7 +63,7 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
   };
 
   private renderHand = (hand: IHand) => {
-    return <HandResult hand={hand} />;
+    return <HandResult hand={hand} key={hand.id} />;
   };
 
   private renderPlayerChooser() {

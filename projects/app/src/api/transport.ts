@@ -10,8 +10,10 @@ import {
   Pass,
 } from "./api";
 
+const API_HOST = window.location.hostname === "localhost" ? "localhost:8999" : window.location.host;
+
 export class Api {
-  private baseUrl: string = "http://localhost:8999/api";
+  private baseUrl: string = `http://${API_HOST}/api`;
 
   public fetchLeague(leagueId: string) {
     const url = `${this.baseUrl}/league/${leagueId}`;

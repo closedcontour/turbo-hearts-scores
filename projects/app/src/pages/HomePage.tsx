@@ -58,10 +58,8 @@ export class HomePage extends React.Component<HomePageProps, HomePageState> {
   private renderLeague = (league: IBasicLeague) => {
     const nav = () => this.props.history.push(`/league/${league.id}`);
     return (
-      <div>
-        <a key={league.id} onClick={nav}>
-          {league.name}
-        </a>
+      <div key={league.id}>
+        <a onClick={nav}>{league.name}</a>
       </div>
     );
   };

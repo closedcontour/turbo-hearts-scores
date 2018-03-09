@@ -6,6 +6,7 @@ import { Card } from "./Card";
 interface PlayerHandProps {
   player: IPlayer;
   hand: IPlayerHand;
+  heartTotal: number;
   score: number;
   onChange(delta: Partial<IPlayerHand> & Pick<IPlayerHand, "index">): void;
 }
@@ -89,9 +90,9 @@ export class PlayerHand extends React.Component<PlayerHandProps, {}> {
   }
 
   private renderHearts() {
-    const { hand } = this.props;
+    const { hand, heartTotal } = this.props;
     const hearts = [];
-    for (let i = 0; i <= 13; i++) {
+    for (let i = 0; i <= 13 - heartTotal + hand.hearts; i++) {
       hearts.push(
         <span
           key={i}
@@ -107,6 +108,6 @@ export class PlayerHand extends React.Component<PlayerHandProps, {}> {
   }
 
   private renderScore() {
-    return <div className="score">{this.props.score}</div>;
+    return <div className="score">{this.props.score === 100 ? "💯" : this.props.score}</div>;
   }
 }

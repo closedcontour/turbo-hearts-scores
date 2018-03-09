@@ -98,7 +98,10 @@ export class PlayerHand extends React.Component<PlayerHandProps, {}> {
       hearts.push(
         <span
           key={i}
-          className={classNames("heart-count", { active: i <= hand.hearts, hidden: i > 13 - heartTotal + hand.hearts })}
+          className={classNames("heart-count", {
+            active: i <= hand.hearts,
+            hidden: i > 13 - heartTotal + hand.hearts,
+          })}
           onClick={() => this.props.onChange({ index: hand.index, hearts: i })}
         >
           {i !== 0 && " "}

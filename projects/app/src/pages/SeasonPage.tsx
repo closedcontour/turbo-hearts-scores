@@ -31,12 +31,27 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
         </a>
         <h1>{this.state.season.name}</h1>
         <button onClick={this.handleNewGame}>New Game</button>
+        {this.renderGames()}
       </div>
     );
   }
 
   public async componentDidMount() {
     this.fetchSeason();
+  }
+
+  private renderGames() {
+    if (!this.state.season!.games) {
+      return null;
+    }
+    const games = this.state.season!.games!.map(game => {
+      return (
+        <div key={game.id} className="game">
+          <a href={`/game/${game.id}`}>Game {game.id}</a>
+        </div>
+      );
+    });
+    return <div className="games">{games}</div>;
   }
 
   private async fetchSeason() {

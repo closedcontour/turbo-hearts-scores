@@ -13,6 +13,14 @@ export class SeasonModel extends Model {
         to: "League.id",
       },
     },
+    games: {
+      relation: Model.HasManyRelation,
+      modelClass: join(__dirname, "Game"),
+      join: {
+        from: "Season.id",
+        to: "Game.seasonId",
+      },
+    },
   };
 
   public readonly id: number;

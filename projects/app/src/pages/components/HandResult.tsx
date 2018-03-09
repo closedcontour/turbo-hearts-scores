@@ -13,15 +13,17 @@ export class HandResult extends React.Component<HandResultProps, {}> {
       return <a href={`/hand/${this.props.hand.id}`}>Hand not finished.</a>;
     }
     return (
-      <div className="th-hand-result">
-        {this.props.hand.playerHands.map((_playerHand, i) => {
-          return (
-            <div key={i} className="score">
-              {result.scores[i]}
-            </div>
-          );
-        })}
-      </div>
+      <a href={`/hand/${this.props.hand.id}`}>
+        <div className="th-hand-result">
+          {this.props.hand.playerHands.map((_playerHand, i) => {
+            return (
+              <div key={i} className="score">
+                {result.scores[i]}
+              </div>
+            );
+          })}
+        </div>
+      </a>
     );
   }
 }

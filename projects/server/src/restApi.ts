@@ -58,9 +58,11 @@ export function getRouter() {
       .select();
     const season = seasons[0];
     const league = await season.$relatedQuery("league");
+    const games = await season.$relatedQuery("games");
     return res.json({
       ...season,
       league,
+      games,
     });
   });
 

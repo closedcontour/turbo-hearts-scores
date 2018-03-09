@@ -39,6 +39,7 @@ export interface ISeason {
   id: number;
   name: string;
   league: IBasicLeague;
+  games: IGame[] | undefined;
 }
 
 export interface IBasicLeague {

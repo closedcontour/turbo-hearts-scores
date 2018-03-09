@@ -4,9 +4,11 @@ export interface IPlayer {
 }
 
 export type Pass = "LEFT" | "RIGHT" | "ACROSS" | "KEEP";
+export const PASSES: Pass[] = ["LEFT", "RIGHT", "ACROSS", "KEEP"];
 
 export interface IHand {
   id: number;
+  gameId: number;
   pass: Pass;
   playerHands: IPlayerHand[];
   players: IPlayer[];
@@ -102,7 +104,7 @@ export function convertWireHand(wireHand: IWireHand): IHand {
     id: wireHand.id,
     pass: wireHand.pass || "LEFT",
     players: wireHand.players,
-    // game
+    gameId: wireHand.gameId,
     playerHands: [
       {
         index: 0,

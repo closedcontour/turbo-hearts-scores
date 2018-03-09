@@ -160,7 +160,7 @@ export class HandPage extends React.Component<HandPageProps, HandPageState> {
         className={classNames("bottom", { valid: result.valid, invalid: !result.valid })}
       >
         {result.invalidReasons.join(" ")}
-        {result.valid && <div>👍</div>}
+        {result.valid && <div className="success">👍</div>}
       </div>
     );
   }
@@ -195,5 +195,6 @@ export class HandPage extends React.Component<HandPageProps, HandPageState> {
     this.setState({ loading: true });
     await this.props.api.finishHand(handId, this.state.hand!);
     this.setState({ loading: false });
+    this.props.history.push(`/game/${this.state.hand!.gameId}`);
   }
 }

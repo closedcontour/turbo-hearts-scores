@@ -1,6 +1,6 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-import { IGame, IHand, IPlayer } from "../api/api";
+import { IGame, IHand, IPlayer, PASSES } from "../api/api";
 import { Api } from "../api/transport";
 import { HandResult } from "./components/HandResult";
 import { PlayerChooser } from "./components/PlayerChooser";
@@ -105,9 +105,13 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
   }
 
   private addHand = async () => {
+    if (!this.state.game) {
+      return;
+    }
     const gameId = this.props.match.params.gameId;
     this.setState({ loading: true });
-    const hand = await this.props.api.createHand(gameId);
+    const pass = PASSES[this.state.game.hands.length];
+    const hand = await this.props.api.createHand(gameId, pass);
     this.props.history.push(`/hand/${hand.id}`);
     this.setState({ loading: false });
   };

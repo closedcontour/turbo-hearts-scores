@@ -8,6 +8,7 @@ import {
   IPlayerHand,
   ISeason,
   IWireHand,
+  Pass,
 } from "./api";
 
 export class Api {
@@ -76,9 +77,9 @@ export class Api {
     });
   }
 
-  public createHand(gameId: string) {
+  public createHand(gameId: string, pass: Pass) {
     const url = `${this.baseUrl}/game/${gameId}/add-hand`;
-    return this.post(url, {}).then((hand: IHand) => {
+    return this.post(url, { pass }).then((hand: IHand) => {
       return hand;
     });
   }

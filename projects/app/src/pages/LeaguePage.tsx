@@ -28,6 +28,7 @@ export class LeaguePage extends React.Component<LeaguePageProps, LeaguePageState
   public render() {
     return (
       <div className="th-league">
+        <a href="/">Home</a>
         {this.state.league && <h1>{this.state.league.name}</h1>}
         <h3>Choose a Season</h3>
         {this.state.league && this.state.league.seasons.map(this.renderSeason)}

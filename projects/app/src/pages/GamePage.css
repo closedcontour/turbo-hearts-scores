@@ -1,0 +1,17 @@
+.th-game {
+
+    & .names {
+        display: flex;
+
+        & .player {
+            flex-grow: 1;
+            width: 25%;
+            display: inline-block;
+        }
+    }
+
+    & .choosers {
+        display: flex;
+        flex-direction: column;
+    }
+}

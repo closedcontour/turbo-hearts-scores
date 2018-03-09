@@ -21,9 +21,15 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
   };
 
   public render() {
+    if (!this.state.season) {
+      return "Loading...";
+    }
     return (
       <div className="th-season">
-        {this.state.season && <h1>{this.state.season.name}</h1>}
+        <a href={`/league/${this.state.season.league.id}`}>
+          Back to {this.state.season.league.name}
+        </a>
+        <h1>{this.state.season.name}</h1>
         <button onClick={this.handleNewGame}>New Game</button>
       </div>
     );

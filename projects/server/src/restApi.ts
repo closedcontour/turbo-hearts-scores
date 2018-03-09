@@ -52,14 +52,16 @@ export function getRouter() {
     });
   });
 
-  router.route("/season/:seasonId").get((_req, res) => {
-    // TODO: get league
-    SeasonModel.query()
+  router.route("/season/:seasonId").get(async (_req, res) => {
+    const seasons = await SeasonModel.query()
       .where("id", "=", _req.params.seasonId)
-      .select()
-      .then(league => {
-        res.json(league[0]);
-      });
+      .select();
+    const season = seasons[0];
+    const league = await season.$relatedQuery("league");
+    return res.json({
+      ...season,
+      league,
+    });
   });
 
   router.route("/league/:leagueId/add-season").post(async (_req, res) => {

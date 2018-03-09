@@ -5,7 +5,6 @@ import {
   IHand,
   ILeague,
   IPlayer,
-  IPlayerHand,
   ISeason,
   IWireHand,
   Pass,

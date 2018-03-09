@@ -11,14 +11,16 @@ export class PlayerChooser extends React.Component<PlayerChooserProps, {}> {
   public render() {
     const selectedId = this.props.selectedPlayer ? this.props.selectedPlayer.id : "";
     return (
-      <select onChange={this.handlePlayerChooserChange} value={selectedId}>
-        <option value="">Choose Player</option>
-        {this.props.players.map(player => (
-          <option key={player.id} value={player.id}>
-            {player.name}
-          </option>
-        ))}
-      </select>
+      <div className="th-player-chooser">
+        <select onChange={this.handlePlayerChooserChange} value={selectedId}>
+          <option value="">Choose Player</option>
+          {this.props.players.map(player => (
+            <option key={player.id} value={player.id}>
+              {player.name}
+            </option>
+          ))}
+        </select>
+      </div>
     );
   }
 

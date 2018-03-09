@@ -1,7 +1,7 @@
 import classNames = require("classnames");
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-import { IHand, IPlayer, IPlayerHand, Pass } from "../api/api";
+import { IHand, IPlayer, IPlayerHand } from "../api/api";
 import { Api } from "../api/transport";
 import { PlayerHand } from "./components/PlayerHand";
 

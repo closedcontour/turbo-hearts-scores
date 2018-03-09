@@ -28,11 +28,15 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
     if (this.state.game === undefined) {
       return <div className="th-game">"Loading..."</div>;
     }
-    if (this.state.started) {
-      return this.renderScores();
-    } else {
-      return this.renderPlayerChooser();
-    }
+    const game = this.state.game!;
+    const seasonId = game.season.id;
+    const content = this.state.started ? this.renderScores() : this.renderPlayerChooser();
+    return (
+      <div className="th-game">
+        <a href={`/season/${seasonId}`}>Back to {game.season.name}</a>
+        {content}
+      </div>
+    );
   }
 
   public componentDidMount() {
@@ -40,14 +44,23 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
   }
 
   private renderScores() {
+    const game = this.state.game!;
     return (
-      <div className="th-game">
-        Game {this.props.match.params.gameId}
-        <div className="hand-scores">{this.state.game!.hands.map(this.renderHand)}</div>
+      <div>
+        <div className="names">{game.players.map(p => this.renderName(p!))}</div>
+        <div className="hand-scores">{game.hands.map(this.renderHand)}</div>
         <button onClick={this.addHand}>Add Hand</button>
       </div>
     );
   }
+
+  private renderName = (player: IPlayer) => {
+    return (
+      <div key={player.id} className="player">
+        {player.name}
+      </div>
+    );
+  };
 
   private renderHand = (hand: IHand) => {
     return <HandResult hand={hand} />;
@@ -79,8 +92,7 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
     const fullGame = this.state.game.players.every(p => p != null);
     const noDupes = new Set(this.state.game.players.map(p => (p == null ? -1 : p.id))).size === 4;
     return (
-      <div className="th-game">
-        Game {this.props.match.params.gameId}
+      <div className="choosers">
         {choosers}
         <button disabled={!fullGame || !noDupes} onClick={this.startGame}>
           Start
@@ -119,7 +131,7 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
   private startGame = async () => {
     const gameId = this.props.match.params.gameId;
     this.setState({ loading: true });
-    const wireGame = await this.props.api.startGame(
+    await this.props.api.startGame(
       gameId,
       this.state.game!.players.map(p => (p ? p.id.toString() : null)),
     );

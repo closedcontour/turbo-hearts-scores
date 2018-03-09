@@ -132,13 +132,21 @@ export class HandPage extends React.Component<HandPageProps, HandPageState> {
 
   public render() {
     const result = getHandResult(this.state.hand);
+    if (!this.state.hand) {
+      return <div className="th-hand th-page">{this.renderBottom(result)}</div>;
+    }
+    const heartTotal = this.state.hand.playerHands.reduce((sum, hand) => hand.hearts + sum, 0);
     return (
       <div className="th-hand th-page">
-        {this.state.hand && this.state.hand.pass}
-        {this.state.hand &&
-          this.state.hand.playerHands.map((playerHand, i) =>
-            this.renderPlayerHand(playerHand, this.state.hand!.players[i], result.scores[i]),
-          )}
+        {this.state.hand.pass}
+        {this.state.hand.playerHands.map((playerHand, i) =>
+          this.renderPlayerHand(
+            playerHand,
+            this.state.hand!.players[i],
+            result.scores[i],
+            heartTotal,
+          ),
+        )}
         {this.renderBottom(result)}
       </div>
     );
@@ -177,9 +185,20 @@ export class HandPage extends React.Component<HandPageProps, HandPageState> {
     this.setState({ hand: newHand });
   };
 
-  private renderPlayerHand = (playerHand: IPlayerHand, player: IPlayer, score: number) => {
+  private renderPlayerHand = (
+    playerHand: IPlayerHand,
+    player: IPlayer,
+    score: number,
+    heartTotal: number,
+  ) => {
     return (
-      <PlayerHand player={player} hand={playerHand} onChange={this.applyDelta} score={score || 0} />
+      <PlayerHand
+        player={player}
+        hand={playerHand}
+        onChange={this.applyDelta}
+        score={score || 0}
+        heartTotal={heartTotal}
+      />
     );
   };
 

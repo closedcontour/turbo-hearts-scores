@@ -10,7 +10,7 @@ import {
   Pass,
 } from "./api";
 
-const API_HOST = window.location.hostname === "localhost" ? "localhost:8999" : window.location.host;
+const API_HOST = window.location.hostname === "localhost" ? "localhost:7999" : window.location.host;
 
 export class Api {
   private baseUrl: string = `http://${API_HOST}/api`;

@@ -108,6 +108,6 @@ export class PlayerHand extends React.Component<PlayerHandProps, {}> {
   }
 
   private renderScore() {
-    return <div className="score">{this.props.score}</div>;
+    return <div className="score">{this.props.score === 100 ? "💯" : this.props.score}</div>;
   }
 }

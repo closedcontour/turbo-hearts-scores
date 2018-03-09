@@ -3,6 +3,10 @@
     flex-grow: 1;
     border-top: 1px solid black;
 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
     & h5 {
         line-height: 30px;
         width: 40%;

@@ -27,18 +27,44 @@ a {
 ._clubs {
     color: var(--base0B);
 }
+.active ._clubs,
+._clubs .active,
+._clubs.active {
+    background: var(--base0B);
+    color: white;
+}
 
 ._diamonds {
     color: var(--base0C);
 }
+.active ._diamonds,
+._diamonds .active,
+._diamonds.active {
+    background: var(--base0C);
+    color: white;
+}
 
 ._hearts {
-    color: var(--base0F);
+  color: var(--base0F);
+}
+
+.active ._hearts,
+._hearts .active,
+._hearts.active{
+  background: var(--base0F);
+  color: white;
 }
 
 ._spades {
     color: var(--base07);
 }
+.active ._spades,
+._spades .active,
+._spades.active {
+    background: var(--base07);
+    color: white;
+}
+
 
 .th-page {
     width: 100%;

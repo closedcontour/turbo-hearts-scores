@@ -1,11 +1,24 @@
 .th-player-hand {
-    margin-bottom: 10px;
+    padding: 6px 4px;
     flex-grow: 1;
     border-top: 1px solid black;
 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    & .name-and-score,
+    & .charges,
+    & .took-specials,
+    & .hearts {
+        flex: 0 0 auto;
+    }
+
+    & .name-and-score {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
     & h5 {
         line-height: 30px;
@@ -21,15 +34,18 @@
         }
     }
 
-    & .heart-count {
-        &.active {
-            font-weight: 800;
-            background: #ccc;
-        }
+    & .hearts {
+        display: flex;
+        justify-content: space-between;
     }
 
-    & .score {
+    & .heart-count {
+        flex: 1 1 auto;
         text-align: center;
-        font-size: 30px;
+
+        &.hidden {
+            visibility: hidden;
+            pointer-events: none;
+         }
     }
 }

@@ -15,17 +15,19 @@ export class PlayerHand extends React.Component<PlayerHandProps, {}> {
   public render() {
     return (
       <div className="th-player-hand">
-        {this.renderName()}
+        <div className="name-and-score">
+          {this.renderName()}
+          {this.renderScore()}
+        </div>
         {this.renderCharges()}
         {this.renderTookSpecials()}
         {this.renderHearts()}
-        {this.renderScore()}
       </div>
     );
   }
 
   private renderName() {
-    return this.props.player.name;
+    return <div className="name">{this.props.player.name}</div>;
   }
 
   // tslint:disable:jsx-no-lambda
@@ -92,19 +94,19 @@ export class PlayerHand extends React.Component<PlayerHandProps, {}> {
   private renderHearts() {
     const { hand, heartTotal } = this.props;
     const hearts = [];
-    for (let i = 0; i <= 13 - heartTotal + hand.hearts; i++) {
+    for (let i = 0; i <= 13; i++) {
       hearts.push(
         <span
           key={i}
-          className={classNames("heart-count", { active: i <= hand.hearts })}
+          className={classNames("heart-count", { active: i <= hand.hearts, hidden: i > 13 - heartTotal + hand.hearts })}
           onClick={() => this.props.onChange({ index: hand.index, hearts: i })}
         >
-          {i !== 0 && "—"}
+          {i !== 0 && " "}
           {i}
         </span>,
       );
     }
-    return <div className="hearts _hearts">{hearts}♥</div>;
+    return <div className="hearts _hearts">♥{hearts}</div>;
   }
 
   private renderScore() {

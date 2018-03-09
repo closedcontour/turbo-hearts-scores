@@ -3,9 +3,5 @@
     margin-right: 10px;
     height: 30px;
     line-height: 30px;
-
-    &.active {
-        font-weight: 800;
-        background: #ccc;
-    }
+    text-align: center;
 }

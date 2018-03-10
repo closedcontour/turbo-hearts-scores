@@ -79,6 +79,10 @@ a {
     text-align: center;
     line-height: 50px;
     color: white;
+
+    &.invalid {
+        background: #F55656;
+    }
 }
 
 .th-nav {

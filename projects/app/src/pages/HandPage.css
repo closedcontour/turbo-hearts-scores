@@ -2,7 +2,9 @@
 
     & .bottom {
         height: 80px;
+        padding: 5px;
         border-top: 1px solid black;
+        color: white;
 
         &.valid {
             background: #15B371;

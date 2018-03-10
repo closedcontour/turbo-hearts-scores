@@ -1,3 +1,4 @@
+import classNames = require("classnames");
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { IGame, IHand, IPlayer, PASSES } from "../api/api";
@@ -56,7 +57,7 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
         </div>
         <div className="hand-scores">{game.hands.map(this.renderHand)}</div>
         <div className="th-button" onClick={this.addHand}>
-          Add Hand
+          ⊕ Add Hand
         </div>
       </div>
     );
@@ -89,24 +90,33 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
     const choosers: JSX.Element[] = [];
     for (let i = 0; i < 4; i++) {
       choosers.push(
-        <PlayerChooser
-          key={i}
-          players={this.state.leaguePlayers}
-          selectedPlayer={this.state.game.players[i]}
-          onPlayerChanged={handlePlayerChanged(i)}
-        />,
+        <div className="chooser-wrapper" key={i}>
+          {i + 1}{" "}
+          <PlayerChooser
+            players={this.state.leaguePlayers}
+            selectedPlayer={this.state.game.players[i]}
+            onPlayerChanged={handlePlayerChanged(i)}
+          />
+        </div>,
       );
     }
     const fullGame = this.state.game.players.every(p => p != null);
     const noDupes = new Set(this.state.game.players.map(p => (p == null ? -1 : p.id))).size === 4;
+    const onClick = fullGame && noDupes ? this.startGame : undefined;
     return (
       <div className="th-game th-page">
         {this.renderBackNav()}
-        <div className="choosers">
-          {choosers}
-          <button disabled={!fullGame || !noDupes} onClick={this.startGame}>
-            Start
-          </button>
+        <div className="instructions">
+          Choose players in seat order from left to right starting anywhere.
+        </div>
+        <div className="choosers">{choosers}</div>
+        <div
+          className={classNames("th-button", { invalid: !fullGame || !noDupes })}
+          onClick={onClick}
+        >
+          {!fullGame && "Add more players ✖"}
+          {fullGame && !noDupes && "Fix duplicate players ✖"}
+          {fullGame && noDupes && "Start Game 👍"}
         </div>
       </div>
     );

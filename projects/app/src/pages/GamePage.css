@@ -1,23 +1,33 @@
 .th-game {
 
-        & .names {
-            display: flex;
-            border-bottom: 1px solid black;
-            margin-bottom: 10px;
+    & .names {
+        display: flex;
+        border-bottom: 1px solid black;
+        margin-bottom: 10px;
 
-            & .player {
-                flex: 1 1 0;
-                display: inline-block;
-            }
+        & .player {
+            flex: 1 1 0;
+            display: inline-block;
         }
+    }
 
-        & .hand-scores {
-            flex-grow: 1;
-        }
+    & .hand-scores {
+        flex-grow: 1;
+    }
+
+    & .instructions {
+        margin-bottom: 10px;
+    }
 
     & .choosers {
         display: flex;
         flex-direction: column;
+        flex-grow: 1;
+
+        & .chooser-wrapper {
+            display: flex;
+            justify-content: center;
+        }
     }
 
     & .small {

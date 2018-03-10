@@ -1,18 +1,24 @@
 .th-game {
 
     & .names {
-        display: flex;
         border-bottom: 1px solid black;
+    }
+
+    & .cells {
+        display: flex;
         margin-bottom: 10px;
 
-        & .player {
+        & .cell {
             flex: 1 1 0;
             display: inline-block;
         }
     }
 
-    & .hand-scores {
+    & .summary {
         flex-grow: 1;
+        border-top: 1px solid black;
+        padding-top: 5px;
+        line-height: 30px;
     }
 
     & .instructions {

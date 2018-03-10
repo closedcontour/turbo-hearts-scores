@@ -28,28 +28,36 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
     if (this.state.game === undefined) {
       return <div className="th-game">"Loading..."</div>;
     }
-    const game = this.state.game!;
-    const seasonId = game.season.id;
-    const content = this.state.started ? this.renderScores() : this.renderPlayerChooser();
-    return (
-      <div className="th-game">
-        <a href={`/season/${seasonId}`}>Back to {game.season.name}</a>
-        {content}
-      </div>
-    );
+    return this.state.started ? this.renderScores() : this.renderPlayerChooser();
   }
 
   public componentDidMount() {
     this.fetchGame();
   }
 
+  private renderBackNav() {
+    const game = this.state.game!;
+    const seasonId = game.season.id;
+    return (
+      <div className="th-nav">
+        <a href={`/season/${seasonId}`}>← Back to {game.season.name}</a>
+      </div>
+    );
+  }
+
   private renderScores() {
     const game = this.state.game!;
     return (
-      <div>
-        <div className="names">{game.players.map(p => this.renderName(p!))}</div>
+      <div className="th-game th-page">
+        {this.renderBackNav()}
+        <div className="names">
+          {game.players.map(p => this.renderName(p!))}
+          <div className="small" />
+        </div>
         <div className="hand-scores">{game.hands.map(this.renderHand)}</div>
-        <button onClick={this.addHand}>Add Hand</button>
+        <div className="th-button" onClick={this.addHand}>
+          Add Hand
+        </div>
       </div>
     );
   }
@@ -92,11 +100,14 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
     const fullGame = this.state.game.players.every(p => p != null);
     const noDupes = new Set(this.state.game.players.map(p => (p == null ? -1 : p.id))).size === 4;
     return (
-      <div className="choosers">
-        {choosers}
-        <button disabled={!fullGame || !noDupes} onClick={this.startGame}>
-          Start
-        </button>
+      <div className="th-game th-page">
+        {this.renderBackNav()}
+        <div className="choosers">
+          {choosers}
+          <button disabled={!fullGame || !noDupes} onClick={this.startGame}>
+            Start
+          </button>
+        </div>
       </div>
     );
   }

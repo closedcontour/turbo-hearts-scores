@@ -75,14 +75,14 @@ export class HomePage extends React.Component<HomePageProps, HomePageState> {
   private handleNewLeague = async () => {
     this.setState({ loading: true });
     await this.props.api.createLeague(this.state.newLeague);
-    this.setState({ loading: false });
+    this.setState({ loading: false, newLeague: "" });
     this.fetchData();
   };
 
   private handleNewPlayer = async () => {
     this.setState({ loading: true });
     await this.props.api.createPlayer(this.state.newPlayer);
-    this.setState({ loading: false });
+    this.setState({ loading: false, newPlayer: "" });
     this.fetchData();
   };
 }

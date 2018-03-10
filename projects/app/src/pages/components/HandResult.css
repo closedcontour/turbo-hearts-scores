@@ -1,9 +1,18 @@
+.th-hand-incomplete {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
 .th-hand-result {
     display: flex;
+    margin-bottom: 10px;
+
+    &.centered {
+        text-align: center;
+    }
 
     & .score {
-        flex-grow: 1;
-        width: 25%;
+        flex: 1 1 0;
         display: inline-block;
     }
 }

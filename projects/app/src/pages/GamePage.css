@@ -1,17 +1,26 @@
 .th-game {
 
-    & .names {
-        display: flex;
+        & .names {
+            display: flex;
+            border-bottom: 1px solid black;
+            margin-bottom: 10px;
 
-        & .player {
-            flex-grow: 1;
-            width: 25%;
-            display: inline-block;
+            & .player {
+                flex: 1 1 0;
+                display: inline-block;
+            }
         }
-    }
+
+        & .hand-scores {
+            flex-grow: 1;
+        }
 
     & .choosers {
         display: flex;
         flex-direction: column;
+    }
+
+    & .small {
+        width: 25px;
     }
 }

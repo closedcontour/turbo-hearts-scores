@@ -14,13 +14,13 @@ interface HandPageState {
   hand: IHand | undefined;
 }
 
-export interface HandResult {
+export interface IHandResult {
   valid: boolean;
   invalidReasons: string[];
   scores: number[];
 }
 
-export function getHandResult(hand?: IHand): HandResult {
+export function getHandResult(hand?: IHand): IHandResult {
   if (hand === undefined) {
     return {
       valid: false,
@@ -156,7 +156,7 @@ export class HandPage extends React.Component<HandPageProps, HandPageState> {
     this.fetchHand();
   }
 
-  private renderBottom(result: HandResult) {
+  private renderBottom(result: IHandResult) {
     const onClick = !result.valid
       ? undefined
       : () => {

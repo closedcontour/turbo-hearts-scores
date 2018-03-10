@@ -101,7 +101,7 @@ export class LeaguePage extends React.Component<LeaguePageProps, LeaguePageState
     const leagueId = this.props.match.params.leagueId;
     this.setState({ loading: true });
     await this.props.api.createSeason(leagueId, this.state.newSeason);
-    this.setState({ loading: false });
+    this.setState({ loading: false, newSeason: "" });
     this.fetchLeague();
   };
 
@@ -110,6 +110,7 @@ export class LeaguePage extends React.Component<LeaguePageProps, LeaguePageState
     const playerId = this.state.playerToAdd!.id.toString();
     this.setState({ loading: true });
     await this.props.api.addPlayerToLeague(leagueId, playerId);
+    this.setState({ loading: false, playerToAdd: undefined });
     this.fetchLeague();
   };
 }

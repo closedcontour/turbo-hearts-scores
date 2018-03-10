@@ -8,6 +8,7 @@ interface PlayerHandProps {
   hand: IPlayerHand;
   heartTotal: number;
   score: number;
+  moonshot: boolean;
   onChange(delta: Partial<IPlayerHand> & Pick<IPlayerHand, "index">): void;
 }
 
@@ -113,6 +114,10 @@ export class PlayerHand extends React.Component<PlayerHandProps, {}> {
   }
 
   private renderScore() {
-    return <div className="score">{this.props.score === 100 ? "💯" : this.props.score}</div>;
+    return (
+      <div className="score">
+        {this.props.score === 100 ? "💯" : this.props.score} {this.props.moonshot && "🚀"}
+      </div>
+    );
   }
 }

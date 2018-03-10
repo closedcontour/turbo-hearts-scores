@@ -18,6 +18,7 @@ export interface IHandResult {
   valid: boolean;
   invalidReasons: string[];
   scores: number[];
+  moonshot: boolean[];
 }
 
 export function getHandResult(hand?: IHand): IHandResult {
@@ -26,6 +27,7 @@ export function getHandResult(hand?: IHand): IHandResult {
       valid: false,
       invalidReasons: ["Hand isn't loaded"],
       scores: [],
+      moonshot: [],
     };
   }
   let chargedQs = 0;
@@ -99,6 +101,7 @@ export function getHandResult(hand?: IHand): IHandResult {
     invalidReasons.push("Too many ♥s.");
   }
   const scores: number[] = [];
+  const moonshot: boolean[] = [];
   for (let i = 0; i <= 3; i++) {
     const playerHand = hand.playerHands[i];
     let points = 0;
@@ -108,6 +111,9 @@ export function getHandResult(hand?: IHand): IHandResult {
     points += chargedAh === 1 ? 2 * playerHand.hearts : playerHand.hearts;
     if (playerHand.hearts === 13 && playerHand.tookQs) {
       points = -points;
+      moonshot.push(true);
+    } else {
+      moonshot.push(false);
     }
     if (playerHand.tookJd) {
       points -= chargedJd === 1 ? 20 : 10;
@@ -121,6 +127,7 @@ export function getHandResult(hand?: IHand): IHandResult {
     valid: invalidReasons.length === 0,
     invalidReasons,
     scores,
+    moonshot,
   };
 }
 
@@ -144,6 +151,7 @@ export class HandPage extends React.Component<HandPageProps, HandPageState> {
             playerHand,
             this.state.hand!.players[i],
             result.scores[i],
+            result.moonshot[i],
             heartTotal,
           ),
         )}
@@ -189,6 +197,7 @@ export class HandPage extends React.Component<HandPageProps, HandPageState> {
     playerHand: IPlayerHand,
     player: IPlayer,
     score: number,
+    moonshot: boolean,
     heartTotal: number,
   ) => {
     return (
@@ -197,6 +206,7 @@ export class HandPage extends React.Component<HandPageProps, HandPageState> {
         hand={playerHand}
         onChange={this.applyDelta}
         score={score || 0}
+        moonshot={moonshot}
         heartTotal={heartTotal}
       />
     );

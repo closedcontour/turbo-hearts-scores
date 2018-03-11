@@ -8,6 +8,7 @@ Theme currently duplicated in .postcssrc.
 @import "./reset.css";
 @import "./pages/HandPage.css";
 @import "./pages/GamePage.css";
+@import "./pages/SeasonPage.css";
 @import "./pages/components/HandResult.css";
 @import "./pages/components/PlayerHand.css";
 @import "./pages/components/PlayerChooser.css";

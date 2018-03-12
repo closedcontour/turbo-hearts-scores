@@ -1,9 +1,14 @@
+import {
+  analyzeGameHands,
+  HandSummary,
+  IGame,
+  IHand,
+  IPlayer,
+  PASSES,
+} from "@turbo-hearts-scores/shared";
 import classNames = require("classnames");
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-import { analyzeGameHands } from "../analysis/api";
-import { HandSummary } from "../analysis/HandSummary";
-import { IGame, IHand, IPlayer, PASSES } from "../api/api";
 import { Api } from "../api/transport";
 import { HandResult } from "./components/HandResult";
 import { PlayerChooser } from "./components/PlayerChooser";

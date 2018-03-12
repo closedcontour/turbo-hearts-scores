@@ -1,6 +1,5 @@
+import { getHandResult, IHand, IHandResult } from "@turbo-hearts-scores/shared";
 import * as React from "react";
-import { getHandResult, IHandResult } from "../../analysis/HandResult";
-import { IHand } from "../../api/api";
 
 interface HandResultProps {
   hand: IHand;

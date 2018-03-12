@@ -1,8 +1,6 @@
+import { analyzeGames, IGame, ISeason, Scoreboard } from "@turbo-hearts-scores/shared";
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-import { analyzeGames } from "../analysis/api";
-import { Scoreboard } from "../analysis/Scoreboard";
-import { IGame, ISeason } from "../api/api";
 import { Api } from "../api/transport";
 
 interface SeasonPageProps extends RouteComponentProps<{ seasonId: string }> {
@@ -71,6 +69,7 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
   }
 
   private renderScoreboard() {
+    return null;
     if (!this.state.seasonGames) {
       return;
     }

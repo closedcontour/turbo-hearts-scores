@@ -8,7 +8,7 @@ import {
   ISeason,
   IWireHand,
   Pass,
-} from "./api";
+} from "@turbo-hearts-scores/shared";
 
 const API_HOST = window.location.hostname === "localhost" ? "localhost:7999" : window.location.host;
 

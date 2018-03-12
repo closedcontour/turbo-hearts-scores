@@ -1,4 +1,4 @@
-import { IGame, IHand } from "../api/api";
+import { IGame, IHand } from "..";
 
 export interface IAnalysis<T, R> {
   initialState(): R;

@@ -1,4 +1,4 @@
-import { IHand } from "../api/api";
+import { IHand } from "..";
 
 export interface IHandResult {
   valid: boolean;

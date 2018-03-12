@@ -1,4 +1,4 @@
-import { IGame } from "../api/api";
+import { IGame } from "..";
 import { analyzeHands, IGameAnalysis } from "./api";
 import { HandSummary } from "./HandSummary";
 

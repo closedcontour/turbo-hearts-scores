@@ -1,0 +1,5 @@
+.th-season {
+    & .games {
+        flex-grow: 1;
+    }
+}

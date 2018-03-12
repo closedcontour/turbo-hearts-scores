@@ -1,6 +1,6 @@
+import { IPlayer, IPlayerHand } from "@turbo-hearts-scores/shared";
 import classNames = require("classnames");
 import * as React from "react";
-import { IPlayer, IPlayerHand } from "../../api/api";
 import { Card } from "./Card";
 
 interface PlayerHandProps {

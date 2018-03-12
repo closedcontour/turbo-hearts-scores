@@ -1,6 +1,6 @@
+import { ILeague, IPlayer, ISeason } from "@turbo-hearts-scores/shared";
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-import { ILeague, IPlayer, ISeason } from "../api/api";
 import { Api } from "../api/transport";
 import { PlayerChooser } from "./components/PlayerChooser";
 
@@ -31,13 +31,13 @@ export class LeaguePage extends React.Component<LeaguePageProps, LeaguePageState
         <a href="/">Home</a>
         {this.state.league && <h1>{this.state.league.name}</h1>}
         <h3>Choose a Season</h3>
-        {this.state.league && this.state.league.seasons.map(this.renderSeason)}
+        {this.state.league && this.state.league.seasons!.map(this.renderSeason)}
         <input type="text" value={this.state.newSeason} onChange={this.handleNewSeasonChange} />
         <button onClick={this.handleNewSeason} disabled={this.state.newSeason.length === 0}>
           Create a New Season
         </button>
         <h3>Players in this League</h3>
-        {this.state.league && this.state.league.players.map(this.renderPlayer)}
+        {this.state.league && this.state.league.players!.map(this.renderPlayer)}
         {this.renderAddPlayer()}
       </div>
     );
@@ -77,7 +77,8 @@ export class LeaguePage extends React.Component<LeaguePageProps, LeaguePageState
   }
 
   private renderSeason = (season: ISeason) => {
-    const nav = () => this.props.history.push(`/season/${season.id}`);
+    const nav = () =>
+      this.props.history.push(`/league/${this.props.match.params.leagueId}/season/${season.id}`);
     return (
       <div key={season.id}>
         <a onClick={nav}>{season.name}</a>

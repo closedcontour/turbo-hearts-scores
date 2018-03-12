@@ -1,6 +1,6 @@
+import { ILeague, IPlayer } from "@turbo-hearts-scores/shared";
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-import { IBasicLeague, IPlayer } from "../api/api";
 import { Api } from "../api/transport";
 
 interface HomePageProps extends RouteComponentProps<{}> {
@@ -9,7 +9,7 @@ interface HomePageProps extends RouteComponentProps<{}> {
 
 interface HomePageState {
   loading: boolean;
-  leagues: IBasicLeague[];
+  leagues: ILeague[];
   players: IPlayer[];
   newLeague: string;
   newPlayer: string;
@@ -55,7 +55,7 @@ export class HomePage extends React.Component<HomePageProps, HomePageState> {
     this.setState({ loading: false, leagues, players });
   }
 
-  private renderLeague = (league: IBasicLeague) => {
+  private renderLeague = (league: ILeague) => {
     const nav = () => this.props.history.push(`/league/${league.id}`);
     return (
       <div key={league.id}>

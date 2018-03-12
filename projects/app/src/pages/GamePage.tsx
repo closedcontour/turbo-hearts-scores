@@ -1,13 +1,20 @@
+import {
+  analyzeGameHands,
+  HandSummary,
+  IGame,
+  IHand,
+  IPlayer,
+  PASSES,
+} from "@turbo-hearts-scores/shared";
 import classNames = require("classnames");
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-import { IGame, IHand, IPlayer, PASSES } from "../api/api";
 import { Api } from "../api/transport";
 import { HandResult } from "./components/HandResult";
 import { PlayerChooser } from "./components/PlayerChooser";
-import { getHandResult } from "./HandPage";
 
-interface GamePageProps extends RouteComponentProps<{ gameId: string }> {
+interface GamePageProps
+  extends RouteComponentProps<{ leagueId: string; seasonId: string; gameId: string }> {
   api: Api;
 }
 
@@ -16,31 +23,6 @@ interface GamePageState {
   game: IGame | undefined;
   leaguePlayers: IPlayer[] | undefined;
   started: boolean;
-}
-
-export function scoresToDelta(scores: number[]): number[] {
-  return [
-    scores[1] + scores[2] + scores[3] - 3 * scores[0],
-    scores[0] + scores[2] + scores[3] - 3 * scores[1],
-    scores[0] + scores[1] + scores[3] - 3 * scores[2],
-    scores[0] + scores[1] + scores[2] - 3 * scores[3],
-  ];
-}
-
-export function getGameResult(game: IGame) {
-  const scores = [0, 0, 0, 0];
-  game.hands.forEach(hand => {
-    const result = getHandResult(hand);
-    if (result.valid) {
-      for (let i = 0; i < 4; i++) {
-        scores[i] += result.scores[i];
-      }
-    }
-  });
-  return {
-    scores,
-    delta: scoresToDelta(scores),
-  };
 }
 
 export class GamePage extends React.Component<GamePageProps, GamePageState> {
@@ -64,16 +46,21 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
 
   private renderBackNav() {
     const game = this.state.game!;
-    const seasonId = game.season.id;
+    const params = this.props.match.params;
     return (
       <div className="th-nav">
-        <a href={`/season/${seasonId}`}>← Back to {game.season.name}</a>
+        <a href={`/league/${params.leagueId}/season/${params.seasonId}`}>
+          ← Back to {game.season.name}
+        </a>
       </div>
     );
   }
 
   private renderScores() {
-    const game = this.state.game!;
+    const game = this.state.game;
+    if (game == null || game.players == null || game.hands == null) {
+      return null;
+    }
     return (
       <div className="th-game th-page">
         {this.renderBackNav()}
@@ -104,31 +91,48 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
   };
 
   private renderHand = (hand: IHand) => {
-    return <HandResult hand={hand} key={hand.id} />;
+    const { leagueId, seasonId, gameId } = this.props.match.params;
+    return (
+      <HandResult
+        leagueId={leagueId}
+        seasonId={seasonId}
+        gameId={gameId}
+        hand={hand}
+        key={hand.id}
+      />
+    );
   };
 
   private renderSummary = () => {
-    const game = this.state.game!;
-    const result = getGameResult(game);
-    return result.scores.map((score, i) => {
+    const game = this.state.game;
+    if (game == null || game.players == null || game.hands == null || game.hands.length === 0) {
+      return null;
+    }
+    const result = analyzeGameHands([game], new HandSummary());
+    return game.players.map((player, i) => {
+      const playerResult = result[player!.id];
+      if (!playerResult) {
+        return null;
+      }
       return (
         <div className="cell" key={i}>
-          {score}
+          {playerResult.totalScore}
           <br />
-          {result.delta[i]}
+          {playerResult.totalDelta}
         </div>
       );
     });
   };
 
   private renderPlayerChooser() {
-    if (this.state.loading || !this.state.leaguePlayers || !this.state.game) {
-      return <div className="th-game">"Loading..."</div>;
+    const game = this.state.game;
+    if (this.state.loading || !this.state.leaguePlayers || !game || game.players == null) {
+      return <div className="th-game">Loading...</div>;
     }
-    const handlePlayerChanged = (index: number) => (player: IPlayer | undefined) => {
+    const handlePlayerChanged = (index: number) => (player: IPlayer | null) => {
       const newGame = {
-        ...this.state.game!,
-        players: this.state.game!.players.slice(),
+        ...game,
+        players: game.players!.slice(),
       };
       newGame.players[index] = player;
       this.setState({ game: newGame });
@@ -140,14 +144,14 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
           {i + 1}{" "}
           <PlayerChooser
             players={this.state.leaguePlayers}
-            selectedPlayer={this.state.game.players[i]}
+            selectedPlayer={game.players[i]}
             onPlayerChanged={handlePlayerChanged(i)}
           />
         </div>,
       );
     }
-    const fullGame = this.state.game.players.every(p => p != null);
-    const noDupes = new Set(this.state.game.players.map(p => (p == null ? -1 : p.id))).size === 4;
+    const fullGame = game.players.every(p => p != null);
+    const noDupes = new Set(game.players.map(p => (p == null ? -1 : p.id))).size === 4;
     const onClick = fullGame && noDupes ? this.startGame : undefined;
     return (
       <div className="th-game th-page">
@@ -172,36 +176,41 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
     const gameId = this.props.match.params.gameId;
     this.setState({ loading: true });
     const game = await this.props.api.fetchGame(gameId);
-    const started = game.players.every(p => p != null);
+    const started = game.players !== undefined && game.players.every(p => p != null);
     this.setState({ loading: false, game, started }, this.fetchPlayers);
   }
 
   private async fetchPlayers() {
-    const leagueId = this.state.game!.season.league.id;
+    const params = this.props.match.params;
     this.setState({ loading: true });
-    const league = await this.props.api.fetchLeague(leagueId.toString());
+    const league = await this.props.api.fetchLeague(params.leagueId);
     this.setState({ loading: false, leaguePlayers: league.players });
   }
 
   private addHand = async () => {
-    if (!this.state.game) {
+    const game = this.state.game;
+    if (game == null || game.hands == null) {
       return;
     }
-    const gameId = this.props.match.params.gameId;
+    const { leagueId, seasonId, gameId } = this.props.match.params;
     this.setState({ loading: true });
-    const pass = PASSES[this.state.game.hands.length];
+    const pass = PASSES[game.hands.length];
     const hand = await this.props.api.createHand(gameId, pass);
-    this.props.history.push(`/hand/${hand.id}`);
+    this.props.history.push(
+      `/league/${leagueId}/season/${seasonId}/game/${gameId}/hand/${hand.id}`,
+    );
     this.setState({ loading: false });
   };
 
   private startGame = async () => {
+    const game = this.state.game;
+    if (game == null || game.players == null) {
+      return;
+    }
     const gameId = this.props.match.params.gameId;
     this.setState({ loading: true });
-    await this.props.api.startGame(
-      gameId,
-      this.state.game!.players.map(p => (p ? p.id.toString() : null)),
-    );
-    this.setState({ loading: false, started: true });
+    await this.props.api.startGame(gameId, game.players.map(p => (p ? p.id.toString() : null)));
+    this.setState({ loading: false });
+    this.fetchGame();
   };
 }

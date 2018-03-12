@@ -1,8 +1,10 @@
+import { getHandResult, IHand, IHandResult } from "@turbo-hearts-scores/shared";
 import * as React from "react";
-import { IHand } from "../../api/api";
-import { getHandResult, IHandResult } from "../HandPage";
 
 interface HandResultProps {
+  leagueId: string;
+  seasonId: string;
+  gameId: string;
   hand: IHand;
 }
 
@@ -10,6 +12,11 @@ export class HandResult extends React.Component<HandResultProps, {}> {
   public render() {
     const result = getHandResult(this.props.hand);
     return result.valid ? this.renderHand(result) : this.renderInvalid();
+  }
+
+  private getEditLink() {
+    const { leagueId, seasonId, gameId } = this.props;
+    return `/league/${leagueId}/season/${seasonId}/game/${gameId}/hand/${this.props.hand.id}`;
   }
 
   private renderHand(result: IHandResult) {
@@ -23,7 +30,7 @@ export class HandResult extends React.Component<HandResultProps, {}> {
           );
         })}
         <div className="small">
-          <a href={`/hand/${this.props.hand.id}`}>✏</a>
+          <a href={this.getEditLink()}>✏</a>
         </div>
       </div>
     );
@@ -32,7 +39,7 @@ export class HandResult extends React.Component<HandResultProps, {}> {
   private renderInvalid() {
     return (
       <div className="th-hand-incomplete">
-        <a href={`/hand/${this.props.hand.id}`}>Incomplete hand ✏</a>
+        <a href={this.getEditLink()}>Incomplete hand ✏</a>
       </div>
     );
   }

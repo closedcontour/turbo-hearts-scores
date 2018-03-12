@@ -1,6 +1,8 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-import { ISeason } from "../api/api";
+import { analyzeGames } from "../analysis/api";
+import { Scoreboard } from "../analysis/Scoreboard";
+import { IGame, ISeason } from "../api/api";
 import { Api } from "../api/transport";
 
 interface SeasonPageProps extends RouteComponentProps<{ seasonId: string }> {
@@ -9,14 +11,18 @@ interface SeasonPageProps extends RouteComponentProps<{ seasonId: string }> {
 
 interface SeasonPageState {
   loading: boolean;
+  loadingGames: boolean;
   season: ISeason | undefined;
+  seasonGames: IGame[];
   newSeason: string;
 }
 
 export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState> {
   public state: SeasonPageState = {
     loading: false,
+    loadingGames: false,
     season: undefined,
+    seasonGames: [],
     newSeason: "",
   };
 
@@ -42,6 +48,7 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
 
   public async componentDidMount() {
     this.fetchSeason();
+    this.fetchGames();
   }
 
   private renderGames() {
@@ -55,7 +62,30 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
         </div>
       );
     });
-    return <div className="games">{games}</div>;
+    return (
+      <div className="games">
+        {this.renderScoreboard()}
+        {games}
+      </div>
+    );
+  }
+
+  private renderScoreboard() {
+    if (!this.state.seasonGames) {
+      return;
+    }
+    const scoreboard = analyzeGames(this.state.seasonGames, new Scoreboard());
+    const values = Object.values(scoreboard);
+    values.sort((a, b) => a.totalDelta - b.totalDelta);
+    return (
+      <div className="scoreboard">
+        {values.map(value => (
+          <div key={value.name}>
+            {value.name} / {value.totalDelta}
+          </div>
+        ))}
+      </div>
+    );
   }
 
   private async fetchSeason() {
@@ -63,6 +93,13 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
     this.setState({ loading: true });
     const season = await this.props.api.fetchSeason(seasonId);
     this.setState({ loading: false, season });
+  }
+
+  private async fetchGames() {
+    const seasonId = this.props.match.params.seasonId;
+    this.setState({ loadingGames: true });
+    const seasonGames = await this.props.api.fetchSeasonGames(seasonId);
+    this.setState({ loadingGames: false, seasonGames });
   }
 
   private handleNewGame = async () => {

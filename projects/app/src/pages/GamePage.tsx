@@ -1,11 +1,12 @@
 import classNames = require("classnames");
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
+import { analyzeGameHands } from "../analysis/api";
+import { HandSummary } from "../analysis/HandSummary";
 import { IGame, IHand, IPlayer, PASSES } from "../api/api";
 import { Api } from "../api/transport";
 import { HandResult } from "./components/HandResult";
 import { PlayerChooser } from "./components/PlayerChooser";
-import { getHandResult } from "./HandPage";
 
 interface GamePageProps extends RouteComponentProps<{ gameId: string }> {
   api: Api;
@@ -16,31 +17,6 @@ interface GamePageState {
   game: IGame | undefined;
   leaguePlayers: IPlayer[] | undefined;
   started: boolean;
-}
-
-export function scoresToDelta(scores: number[]): number[] {
-  return [
-    scores[1] + scores[2] + scores[3] - 3 * scores[0],
-    scores[0] + scores[2] + scores[3] - 3 * scores[1],
-    scores[0] + scores[1] + scores[3] - 3 * scores[2],
-    scores[0] + scores[1] + scores[2] - 3 * scores[3],
-  ];
-}
-
-export function getGameResult(game: IGame) {
-  const scores = [0, 0, 0, 0];
-  game.hands.forEach(hand => {
-    const result = getHandResult(hand);
-    if (result.valid) {
-      for (let i = 0; i < 4; i++) {
-        scores[i] += result.scores[i];
-      }
-    }
-  });
-  return {
-    scores,
-    delta: scoresToDelta(scores),
-  };
 }
 
 export class GamePage extends React.Component<GamePageProps, GamePageState> {
@@ -109,13 +85,13 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
 
   private renderSummary = () => {
     const game = this.state.game!;
-    const result = getGameResult(game);
-    return result.scores.map((score, i) => {
+    const result = analyzeGameHands([game], new HandSummary());
+    return game.players.map((player, i) => {
       return (
         <div className="cell" key={i}>
-          {score}
+          {result[player!.id].totalScore}
           <br />
-          {result.delta[i]}
+          {result[player!.id].totalDelta}
         </div>
       );
     });

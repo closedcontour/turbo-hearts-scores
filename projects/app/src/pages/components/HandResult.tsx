@@ -1,6 +1,6 @@
 import * as React from "react";
+import { getHandResult, IHandResult } from "../../analysis/HandResult";
 import { IHand } from "../../api/api";
-import { getHandResult, IHandResult } from "../HandPage";
 
 interface HandResultProps {
   hand: IHand;

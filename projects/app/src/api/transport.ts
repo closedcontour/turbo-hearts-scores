@@ -43,6 +43,13 @@ export class Api {
     });
   }
 
+  public fetchSeasonGames(seasonId: string) {
+    const url = `${this.baseUrl}/season/${seasonId}/games`;
+    return this.get(url).then((games: IGame[]) => {
+      return games;
+    });
+  }
+
   public addPlayerToLeague(leagueId: string, playerId: string) {
     const url = `${this.baseUrl}/league/${leagueId}/add-player`;
     return this.post(url, { playerId }).then((league: IBasicLeague) => {

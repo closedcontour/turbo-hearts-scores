@@ -6,11 +6,15 @@ import { PlayerModel } from "./models/Player";
 import { PlayerLeagueModel } from "./models/PlayerLeague";
 import { SeasonModel } from "./models/Season";
 
+// TODO: use more eager
+// TODO: compression
+// TODO: finish a
+
 export function getRouter() {
   const router = express.Router();
 
-  router.route("/player").post(async (_req, res) => {
-    const player = await PlayerModel.query().insertAndFetch({ name: _req.body.name });
+  router.route("/player").post(async (req, res) => {
+    const player = await PlayerModel.query().insertAndFetch({ name: req.body.name });
     res.json(player);
   });
 
@@ -66,6 +70,27 @@ export function getRouter() {
     });
   });
 
+  router.route("/season/:seasonId/games").get(async (req, res) => {
+    const games = await GameModel.query()
+      .eager("[hands,p1,p2,p3,p4,season]")
+      .where("seasonId", "=", req.params.seasonId)
+      .select();
+    const result = games.map(game => {
+      const hack = game as any;
+      const players = [hack.p1, hack.p2, hack.p3, hack.p4];
+      return {
+        id: game.id,
+        players,
+        season: hack.season,
+        hands: hack.hands.map((hand: any) => ({
+          ...hand,
+          players,
+        })),
+      };
+    });
+    return res.json(result);
+  });
+
   router.route("/league/:leagueId/add-season").post(async (_req, res) => {
     const seasonRequest = _req.body as Partial<SeasonModel>;
     const game = await SeasonModel.query().insertAndFetch({
@@ -114,7 +139,7 @@ export function getRouter() {
         ...season,
         league,
       },
-      hands,
+      hands: hands.map(hand => ({ ...hand, players })),
     });
   });
 
@@ -134,6 +159,7 @@ export function getRouter() {
   });
 
   router.route("/hand/:handId").get(async (_req, res) => {
+    // TODO: eagerify
     const hands = await HandModel.query()
       .select()
       .where("id", "=", _req.params.handId);

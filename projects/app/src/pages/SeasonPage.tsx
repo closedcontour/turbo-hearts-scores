@@ -71,13 +71,12 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
   }
 
   private renderScoreboard() {
-    return null;
     if (!this.state.seasonGames) {
       return;
     }
     const scoreboard = analyzeGames(this.state.seasonGames, new Scoreboard());
     const values = Object.values(scoreboard);
-    values.sort((a, b) => a.totalDelta - b.totalDelta);
+    values.sort((a, b) => b.totalDelta - a.totalDelta);
     return (
       <div className="scoreboard">
         {values.map(value => (
@@ -104,10 +103,10 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
   }
 
   private handleNewGame = async () => {
-    const seasonId = this.props.match.params.seasonId;
+    const { leagueId, seasonId } = this.props.match.params;
     this.setState({ loading: true });
     const game = await this.props.api.createGame(seasonId);
-    this.props.history.push(`/game/${game.id}`);
+    this.props.history.push(`/league/${leagueId}/season/${seasonId}/game/${game.id}`);
     this.setState({ loading: false });
   };
 }

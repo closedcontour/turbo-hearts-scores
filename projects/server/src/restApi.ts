@@ -7,7 +7,6 @@ import { PlayerModel } from "./models/Player";
 import { PlayerLeagueModel } from "./models/PlayerLeague";
 import { SeasonModel } from "./models/Season";
 
-// TODO: use more eager
 // TODO: compression
 // TODO: patches should be in API format, not DB
 
@@ -159,9 +158,9 @@ export function getRouter() {
     res.json(dbLeagueToApi(league, league.seasons, league.players));
   });
 
-  router.route("/season/:seasonId").get(async (_req, res) => {
+  router.route("/season/:seasonId").get(async (req, res) => {
     const seasons = await SeasonModel.query()
-      .where("id", "=", _req.params.seasonId)
+      .where("id", "=", req.params.seasonId)
       .eager("[league,games]")
       .select();
     const season = seasons[0] as any;
@@ -180,51 +179,51 @@ export function getRouter() {
     );
   });
 
-  router.route("/league/:leagueId/add-season").post(async (_req, res) => {
-    const seasonRequest = _req.body as Partial<SeasonModel>;
+  router.route("/league/:leagueId/add-season").post(async (req, res) => {
+    const seasonRequest = req.body as Partial<SeasonModel>;
     const game = await SeasonModel.query().insertAndFetch({
-      leagueId: _req.params.leagueId,
+      leagueId: req.params.leagueId,
       ...seasonRequest,
     });
     res.json(game);
   });
 
-  router.route("/league/:leagueId/add-player").post(async (_req, res) => {
+  router.route("/league/:leagueId/add-player").post(async (req, res) => {
     await PlayerLeagueModel.query().insert({
-      leagueId: _req.params.leagueId,
-      playerId: _req.body.playerId,
+      leagueId: req.params.leagueId,
+      playerId: req.body.playerId,
     });
     res.json(true);
   });
 
-  router.route("/season/:seasonId/add-game").post(async (_req, res) => {
-    const gameRequest = _req.body as Partial<GameModel>;
+  router.route("/season/:seasonId/add-game").post(async (req, res) => {
+    const gameRequest = req.body as Partial<GameModel>;
     const game = await GameModel.query().insertAndFetch({
-      seasonId: _req.params.seasonId,
+      seasonId: req.params.seasonId,
       ...gameRequest,
     });
     res.json(game);
   });
 
-  router.route("/game/:gameId").get(async (_req, res) => {
+  router.route("/game/:gameId").get(async (req, res) => {
     const games = await GameModel.query()
       .select()
       .eager("[p1,p2,p3,p4,season,hands]")
-      .where("id", "=", _req.params.gameId);
+      .where("id", "=", req.params.gameId);
     const game = games[0] as any;
     res.json(dbGameToApi(game, game.season, [game.p1, game.p2, game.p3, game.p4], game.hands));
   });
 
-  router.route("/game/:gameId").patch(async (_req, res) => {
-    const gameRequest = _req.body as Partial<GameModel>;
-    const game = await GameModel.query().patchAndFetchById(_req.params.gameId, gameRequest);
+  router.route("/game/:gameId").patch(async (req, res) => {
+    const gameRequest = req.body as Partial<GameModel>;
+    const game = await GameModel.query().patchAndFetchById(req.params.gameId, gameRequest);
     res.json(game);
   });
 
-  router.route("/game/:gameId/add-hand").post(async (_req, res) => {
-    const handRequest = _req.body as Partial<HandModel>;
+  router.route("/game/:gameId/add-hand").post(async (req, res) => {
+    const handRequest = req.body as Partial<HandModel>;
     const hand = await HandModel.query().insertAndFetch({
-      gameId: _req.params.gameId,
+      gameId: req.params.gameId,
       ...handRequest,
     });
     res.json(hand);
@@ -239,9 +238,9 @@ export function getRouter() {
     res.json(dbHandToApi(hand, [hand.game.p1, hand.game.p2, hand.game.p3, hand.game.p4]));
   });
 
-  router.route("/hand/:handId").patch(async (_req, res) => {
-    const handRequest = _req.body as Partial<HandModel>;
-    const hand = await HandModel.query().patchAndFetchById(_req.params.handId, handRequest);
+  router.route("/hand/:handId").patch(async (req, res) => {
+    const handRequest = req.body as Partial<HandModel>;
+    const hand = await HandModel.query().patchAndFetchById(req.params.handId, handRequest);
     res.json(hand);
   });
 

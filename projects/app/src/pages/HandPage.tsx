@@ -11,7 +11,13 @@ import { RouteComponentProps } from "react-router";
 import { Api } from "../api/transport";
 import { PlayerHand } from "./components/PlayerHand";
 
-interface HandPageProps extends RouteComponentProps<{ handId: string }> {
+interface HandPageProps
+  extends RouteComponentProps<{
+      leagueId: string;
+      seasonId: string;
+      gameId: string;
+      handId: string;
+    }> {
   api: Api;
 }
 
@@ -109,10 +115,10 @@ export class HandPage extends React.Component<HandPageProps, HandPageState> {
   }
 
   private async finishHand() {
-    const handId = this.props.match.params.handId;
+    const { leagueId, seasonId, gameId, handId } = this.props.match.params;
     this.setState({ loading: true });
     await this.props.api.finishHand(handId, this.state.hand!);
     this.setState({ loading: false });
-    this.props.history.push(`/game/${this.state.hand!.gameId}`);
+    this.props.history.push(`/league/${leagueId}/season/${seasonId}/game/${gameId}`);
   }
 }

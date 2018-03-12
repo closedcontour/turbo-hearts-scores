@@ -105,16 +105,20 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
 
   private renderSummary = () => {
     const game = this.state.game;
-    if (game == null || game.players == null) {
+    if (game == null || game.players == null || game.hands == null || game.hands.length === 0) {
       return null;
     }
     const result = analyzeGameHands([game], new HandSummary());
     return game.players.map((player, i) => {
+      const playerResult = result[player!.id];
+      if (!playerResult) {
+        return null;
+      }
       return (
         <div className="cell" key={i}>
-          {result[player!.id].totalScore}
+          {playerResult.totalScore}
           <br />
-          {result[player!.id].totalDelta}
+          {playerResult.totalDelta}
         </div>
       );
     });
@@ -188,12 +192,13 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
     if (game == null || game.hands == null) {
       return;
     }
-    const gameId = this.props.match.params.gameId;
+    const { leagueId, seasonId, gameId } = this.props.match.params;
     this.setState({ loading: true });
     const pass = PASSES[game.hands.length];
     const hand = await this.props.api.createHand(gameId, pass);
-    const params = this.props.match.params;
-    this.props.history.push(`/league/${params.leagueId}/season/${params.seasonId}/hand/${hand.id}`);
+    this.props.history.push(
+      `/league/${leagueId}/season/${seasonId}/game/${gameId}/hand/${hand.id}`,
+    );
     this.setState({ loading: false });
   };
 
@@ -205,6 +210,7 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
     const gameId = this.props.match.params.gameId;
     this.setState({ loading: true });
     await this.props.api.startGame(gameId, game.players.map(p => (p ? p.id.toString() : null)));
-    this.setState({ loading: false, started: true });
+    this.setState({ loading: false });
+    this.fetchGame();
   };
 }

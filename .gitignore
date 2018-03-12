@@ -10,6 +10,7 @@ _book
 .cache/
 dist/
 lerna-debug.log
+yarn-error.log
 *.sqlite3
 
 projects/server/assets

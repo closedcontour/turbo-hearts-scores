@@ -27,7 +27,7 @@ export class Scoreboard implements IGameAnalysis<ScoreMap> {
     if (!game.players || game.players.length === 0) {
       return current;
     }
-    if (game.players.some(p => p == null)) {
+    if (game.players.some(p => p == null) || game.hands == null || game.hands.length === 0) {
       return current;
     }
     const handSummary = analyzeHands(game.hands, new HandSummary());

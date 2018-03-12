@@ -13,7 +13,8 @@ export function scoresToDelta(scores: number[]): number[] {
 
 export function getGameResult(game: IGame) {
   const scores = [0, 0, 0, 0];
-  game.hands.forEach(hand => {
+  const hands = game.hands || [];
+  hands.forEach(hand => {
     const result = getHandResult(hand);
     if (result.valid) {
       for (let i = 0; i < 4; i++) {

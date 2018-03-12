@@ -28,6 +28,9 @@ export function analyzeHands<R>(hands: IHand[], analysis: IHandAnalysis<R>): R {
 export function analyzeGameHands<R>(games: IGame[], analysis: IHandAnalysis<R>): R {
   let current = analysis.initialState();
   for (const game of games) {
+    if (game.hands == null) {
+      continue;
+    }
     for (const hand of game.hands) {
       current = analysis.analyze(current, hand);
     }

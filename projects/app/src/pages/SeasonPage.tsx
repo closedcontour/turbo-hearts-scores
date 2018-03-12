@@ -3,7 +3,7 @@ import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { Api } from "../api/transport";
 
-interface SeasonPageProps extends RouteComponentProps<{ seasonId: string }> {
+interface SeasonPageProps extends RouteComponentProps<{ leagueId: string; seasonId: string }> {
   api: Api;
 }
 
@@ -25,15 +25,14 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
   };
 
   public render() {
-    if (!this.state.season) {
+    if (!this.state.season || !this.state.season.league) {
       return "Loading...";
     }
+    const params = this.props.match.params;
     return (
       <div className="th-season th-page">
         <div className="th-nav">
-          <a href={`/league/${this.state.season.league.id}`}>
-            ← Back to {this.state.season.league.name}
-          </a>
+          <a href={`/league/${params.leagueId}`}>← Back to {this.state.season.league.name}</a>
         </div>
         <h1>{this.state.season.name}</h1>
         {this.renderGames()}
@@ -53,10 +52,13 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
     if (!this.state.season!.games) {
       return null;
     }
+    const params = this.props.match.params;
     const games = this.state.season!.games!.map(game => {
       return (
         <div key={game.id} className="game">
-          <a href={`/game/${game.id}`}>Game {game.id}</a>
+          <a href={`/league/${params.leagueId}/season/${params.seasonId}/game/${game.id}`}>
+            Game {game.id}
+          </a>
         </div>
       );
     });

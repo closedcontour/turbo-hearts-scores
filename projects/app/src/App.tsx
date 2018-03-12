@@ -34,9 +34,17 @@ export class App extends React.Component<AppProps, {}> {
         <div>
           <Route exact={true} path="/" render={homePage} />
           <Route exact={true} path="/league/:leagueId" render={leaguePage} />
-          <Route exact={true} path="/season/:seasonId" render={seasonPage} />
-          <Route exact={true} path="/game/:gameId" render={gamePage} />
-          <Route exact={true} path="/hand/:handId" render={handPage} />
+          <Route exact={true} path="/league/:leagueId/season/:seasonId" render={seasonPage} />
+          <Route
+            exact={true}
+            path="/league/:leagueId/season/:seasonId/game/:gameId"
+            render={gamePage}
+          />
+          <Route
+            exact={true}
+            path="/league/:leagueId/season/:seasonId/game/:gameId/hand/:handId"
+            render={handPage}
+          />
         </div>
       </Router>
     );

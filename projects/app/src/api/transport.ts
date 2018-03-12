@@ -1,14 +1,4 @@
-import {
-  convertWireHand,
-  IBasicLeague,
-  IGame,
-  IHand,
-  ILeague,
-  IPlayer,
-  ISeason,
-  IWireHand,
-  Pass,
-} from "@turbo-hearts-scores/shared";
+import { IGame, IHand, ILeague, IPlayer, ISeason, Pass } from "@turbo-hearts-scores/shared";
 
 const API_HOST = window.location.hostname === "localhost" ? "localhost:7999" : window.location.host;
 
@@ -31,7 +21,7 @@ export class Api {
 
   public fetchLeagues() {
     const url = `${this.baseUrl}/leagues`;
-    return this.get(url).then((leagues: IBasicLeague[]) => {
+    return this.get(url).then((leagues: ILeague[]) => {
       return leagues;
     });
   }
@@ -52,14 +42,14 @@ export class Api {
 
   public addPlayerToLeague(leagueId: string, playerId: string) {
     const url = `${this.baseUrl}/league/${leagueId}/add-player`;
-    return this.post(url, { playerId }).then((league: IBasicLeague) => {
+    return this.post(url, { playerId }).then((league: ILeague) => {
       return league;
     });
   }
 
   public createLeague(name: string) {
     const url = `${this.baseUrl}/league`;
-    return this.post(url, { name }).then((league: IBasicLeague) => {
+    return this.post(url, { name }).then((league: ILeague) => {
       return league;
     });
   }
@@ -94,15 +84,14 @@ export class Api {
 
   public async fetchHand(handId: string) {
     const url = `${this.baseUrl}/hand/${handId}`;
-    const wireHand = await this.get(url);
-    return convertWireHand(wireHand);
+    const hand = await this.get(url);
+    return hand as IHand;
   }
 
   public async fetchGame(gameId: string) {
     const url = `${this.baseUrl}/game/${gameId}`;
-    const wireGame = await this.get(url);
-    wireGame.hands = (wireGame.hands as IWireHand[]).map(convertWireHand);
-    return wireGame as IGame;
+    const game = await this.get(url);
+    return game as IGame;
   }
 
   public async startGame(gameId: string, playerIds: Array<string | null>) {

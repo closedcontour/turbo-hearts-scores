@@ -61,6 +61,6 @@ export class GameModel extends Model {
   public readonly p2Id: number;
   public readonly p3Id: number;
   public readonly p4Id: number;
-
+  public readonly deleted: boolean;
   // date
 }

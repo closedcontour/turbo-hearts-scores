@@ -104,7 +104,10 @@ function dbSeasonToApi(season: SeasonModel, league?: LeagueModel, games?: GameMo
     id: season.id.toString(),
     name: season.name,
     league: league !== undefined ? dbLeagueToApi(league) : undefined,
-    games: games !== undefined ? games.map(game => dbGameToApi(game, season)) : undefined,
+    games:
+      games !== undefined
+        ? games.filter(game => !game.deleted).map(game => dbGameToApi(game, season))
+        : undefined,
   };
 }
 
@@ -173,9 +176,11 @@ export function getRouter() {
       .where("seasonId", "=", req.params.seasonId)
       .select();
     res.json(
-      games.map((game: any) =>
-        dbGameToApi(game, game.season, [game.p1, game.p2, game.p3, game.p4], game.hands),
-      ),
+      games
+        .filter(game => !game.deleted)
+        .map((game: any) =>
+          dbGameToApi(game, game.season, [game.p1, game.p2, game.p3, game.p4], game.hands),
+        ),
     );
   });
 
@@ -217,6 +222,15 @@ export function getRouter() {
   router.route("/game/:gameId").patch(async (req, res) => {
     const gameRequest = req.body as Partial<GameModel>;
     const game = await GameModel.query().patchAndFetchById(req.params.gameId, gameRequest);
+    res.json(game);
+  });
+
+  router.route("/game/:gameId").delete(async (req, res) => {
+    const deleteRequest = {
+      id: req.params.gameId,
+      deleted: true,
+    };
+    const game = await GameModel.query().patchAndFetchById(req.params.gameId, deleteRequest);
     res.json(game);
   });
 

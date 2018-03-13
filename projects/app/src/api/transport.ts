@@ -3,7 +3,7 @@ import { IGame, IHand, ILeague, IPlayer, ISeason, Pass } from "@turbo-hearts-sco
 const API_HOST = window.location.hostname === "localhost" ? "localhost:7999" : window.location.host;
 
 export class Api {
-  private baseUrl: string = `${window.location.protocol}://${API_HOST}/api`;
+  private baseUrl: string = `${window.location.protocol}//${API_HOST}/api`;
 
   public fetchLeague(leagueId: string) {
     const url = `${this.baseUrl}/league/${leagueId}`;

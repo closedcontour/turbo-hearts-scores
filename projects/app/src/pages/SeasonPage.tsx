@@ -77,6 +77,7 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
     const scoreboard = analyzeGames(this.state.seasonGames, new Scoreboard());
     const values = Object.values(scoreboard);
     values.sort((a, b) => b.totalDelta - a.totalDelta);
+    const params = this.props.match.params;
     return (
       <div className="scoreboard">
         {values.map(value => (
@@ -84,6 +85,7 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
             {value.name} / {value.totalDelta}
           </div>
         ))}
+        <a href={`/league/${params.leagueId}/season/${params.seasonId}/history`}>History</a>
       </div>
     );
   }

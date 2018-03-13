@@ -6,6 +6,7 @@ import { GamePage } from "./pages/GamePage";
 import { HandPage } from "./pages/HandPage";
 import { HomePage } from "./pages/HomePage";
 import { LeaguePage } from "./pages/LeaguePage";
+import { SeasonHistoryPage } from "./pages/SeasonHistoryPage";
 import { SeasonPage } from "./pages/SeasonPage";
 
 export interface AppProps {
@@ -23,6 +24,9 @@ export class App extends React.Component<AppProps, {}> {
     const seasonPage = (props: RouteComponentProps<any>) => (
       <SeasonPage {...props} api={this.props.api} />
     );
+    const seasonHistoryPage = (props: RouteComponentProps<any>) => (
+      <SeasonHistoryPage {...props} api={this.props.api} />
+    );
     const gamePage = (props: RouteComponentProps<any>) => (
       <GamePage {...props} api={this.props.api} />
     );
@@ -35,6 +39,11 @@ export class App extends React.Component<AppProps, {}> {
           <Route exact={true} path="/" render={homePage} />
           <Route exact={true} path="/league/:leagueId" render={leaguePage} />
           <Route exact={true} path="/league/:leagueId/season/:seasonId" render={seasonPage} />
+          <Route
+            exact={true}
+            path="/league/:leagueId/season/:seasonId/history"
+            render={seasonHistoryPage}
+          />
           <Route
             exact={true}
             path="/league/:leagueId/season/:seasonId/game/:gameId"

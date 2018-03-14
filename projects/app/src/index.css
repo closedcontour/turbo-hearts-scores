@@ -6,6 +6,7 @@ Theme currently duplicated in .postcssrc.
 @import "./themes/base16-harmonic16-light.css";
 
 @import "./reset.css";
+@import "./pages/HomePage.css";
 @import "./pages/HandPage.css";
 @import "./pages/GamePage.css";
 @import "./pages/SeasonPage.css";
@@ -91,4 +92,12 @@ a {
     background: var(--base01);
     border-bottom: 1px solid var(--base02);
     padding: 10px 0 10px 5px;
+}
+
+.th-text-input {
+    font-size: 19px;
+    border: 1px solid var(--base02);
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
 }

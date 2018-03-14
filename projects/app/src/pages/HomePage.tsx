@@ -1,4 +1,5 @@
 import { ILeague, IPlayer } from "@turbo-hearts-scores/shared";
+import classNames = require("classnames");
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { Api } from "../api/transport";
@@ -26,20 +27,37 @@ export class HomePage extends React.Component<HomePageProps, HomePageState> {
 
   public render() {
     return (
-      <div className="th-home">
-        <h3>Choose a League</h3>
-        {this.state.leagues.map(this.renderLeague)}
-        <hr />
-        <input type="text" value={this.state.newLeague} onChange={this.handleNewLeagueChange} />
-        <button onClick={this.handleNewLeague} disabled={this.state.newLeague.length === 0}>
+      <div className="th-home th-page">
+        <div className="logo-piece">🏃</div>
+        <div className="logo-piece">🚫</div>
+        <h3>Leagues</h3>
+        <div className="league-list">{this.state.leagues.map(this.renderLeague)}</div>
+        <input
+          className="th-text-input"
+          type="text"
+          value={this.state.newLeague}
+          onChange={this.handleNewLeagueChange}
+          placeholder="Enter a league name"
+        />
+        <div
+          className={classNames("th-button pad", { invalid: this.state.newLeague.length === 0 })}
+          onClick={this.handleNewLeague}
+        >
           Create a New League
-        </button>
-        <hr />
-        <div>{this.state.players.length} Players</div>
-        <input type="text" value={this.state.newPlayer} onChange={this.handleNewPlayerChange} />
-        <button onClick={this.handleNewPlayer} disabled={this.state.newPlayer.length === 0}>
+        </div>
+        <input
+          className="th-text-input"
+          type="text"
+          value={this.state.newPlayer}
+          onChange={this.handleNewPlayerChange}
+          placeholder="Enter a short player name"
+        />
+        <div
+          className={classNames("th-button", { invalid: this.state.newPlayer.length === 0 })}
+          onClick={this.handleNewPlayer}
+        >
           Create a New Player
-        </button>
+        </div>
       </div>
     );
   }

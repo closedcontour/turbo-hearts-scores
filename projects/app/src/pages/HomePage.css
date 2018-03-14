@@ -1,0 +1,25 @@
+.th-home {
+
+    & .logo-piece {
+        position: absolute;
+        margin-left: auto;
+        margin-right: auto;
+        top: 20px;
+        left: 0;
+        right: 0;
+        font-size: 100px;
+        width: 100px;
+    }
+
+    & h3 {
+        margin-top: 140px;
+    }
+
+    & .league-list {
+        flex-grow: 1;
+    }
+
+    & .pad {
+        margin-bottom: 20px;
+    }
+}

@@ -10,6 +10,7 @@ import classNames = require("classnames");
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { Api } from "../api/transport";
+import { formatDateTime } from "../format";
 import { HandResult } from "./components/HandResult";
 import { PlayerChooser } from "./components/PlayerChooser";
 
@@ -64,6 +65,7 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
     return (
       <div className="th-game th-page">
         {this.renderBackNav()}
+        <div className="time">{formatDateTime(game.time)}</div>
         <div className="cells names">
           {game.players.map(p => this.renderName(p!))}
           <div className="small" />

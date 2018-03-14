@@ -59,4 +59,5 @@ export class HandModel extends Model {
   public readonly p2Hearts: number;
   public readonly p3Hearts: number;
   public readonly p4Hearts: number;
+  public readonly time: number;
 }

@@ -13,6 +13,7 @@ export interface IHand {
   pass: Pass;
   playerHands: IPlayerHand[];
   players: IPlayer[];
+  time: number;
 }
 
 export interface IPlayerHand {
@@ -35,6 +36,7 @@ export interface IGame {
   season: ISeason;
   players?: Array<IPlayer | null>;
   hands?: IHand[];
+  time: number;
 }
 
 export interface ISeason {

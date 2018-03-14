@@ -10,6 +10,10 @@ import { SeasonModel } from "./models/Season";
 // TODO: compression
 // TODO: patches should be in API format, not DB
 
+function timeInSeconds() {
+  return Math.floor(new Date().getTime() / 1000);
+}
+
 function dbPlayerToApi(player: PlayerModel): IPlayer {
   return {
     id: player.id.toString(),
@@ -22,6 +26,7 @@ function dbHandToApi(hand: HandModel, players: IPlayer[]): IHand {
     id: hand.id.toString(),
     gameId: hand.gameId.toString(),
     pass: hand.pass as Pass,
+    time: hand.time,
     players,
     playerHands: [
       {
@@ -92,6 +97,7 @@ function dbGameToApi(
     id: game.id.toString(),
     season: dbSeasonToApi(season),
     players: mappedPlayers,
+    time: game.time,
     hands:
       hands !== undefined && players !== undefined && !anyNullPlayers
         ? hands.map(hand => dbHandToApi(hand, mappedPlayers as IPlayer[]))
@@ -206,6 +212,7 @@ export function getRouter() {
     const game = await GameModel.query().insertAndFetch({
       seasonId: req.params.seasonId,
       ...gameRequest,
+      time: timeInSeconds(),
     });
     res.json(game);
   });
@@ -239,6 +246,7 @@ export function getRouter() {
     const hand = await HandModel.query().insertAndFetch({
       gameId: req.params.gameId,
       ...handRequest,
+      time: timeInSeconds(),
     });
     res.json(hand);
   });

@@ -1,7 +1,12 @@
 .th-game {
 
+    & .time {
+        text-align: center;
+        padding: 10px 0 20px 0;
+    }
+
     & .names {
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid var(--base03);
     }
 
     & .cells {
@@ -15,14 +20,32 @@
     }
 
     & .summary {
-        flex-grow: 1;
-        border-top: 1px solid black;
         padding-top: 5px;
         line-height: 30px;
+
+        &.cells {
+            border-top: 1px solid var(--base03);
+        }
+
+        &.no-hands {
+            text-align: center;
+            margin-top: 25px;
+        }
+    }
+
+    & .money {
+        margin-top: 20px;
+        flex-grow: 1;
+
+        & .header {
+            border-bottom: 1px solid var(--base03);
+            margin-bottom: 10px;
+        }
     }
 
     & .instructions {
-        margin-bottom: 10px;
+        margin-bottom: 30px;
+        padding: 5px;
     }
 
     & .choosers {

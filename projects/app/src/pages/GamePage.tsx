@@ -71,12 +71,8 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
           <div className="small" />
         </div>
         <div className="hand-scores">{game.hands.map(this.renderHand)}</div>
-        <div className="cells summary">
-          {this.renderSummary()}
-          <div className="small">
-            <br />💰
-          </div>
-        </div>
+        {this.renderSummary()}
+        {this.renderMoney()}
         <div className="th-button" onClick={this.addHand}>
           Add Hand
         </div>
@@ -108,22 +104,55 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
   private renderSummary = () => {
     const game = this.state.game;
     if (game == null || game.players == null || game.hands == null || game.hands.length === 0) {
+      return <div className="no-hands summary">⚠️ There aren't any completed hands</div>;
+    }
+    if (game.hands.length === 1) {
       return null;
     }
     const result = analyzeGameHands([game], new HandSummary());
-    return game.players.map((player, i) => {
-      const playerResult = result[player!.id];
-      if (!playerResult) {
-        return null;
-      }
-      return (
-        <div className="cell" key={i}>
-          {playerResult.totalScore}
-          <br />
-          {playerResult.totalDelta}
+    return (
+      <div className="cells summary">
+        {game.players.map((player, i) => {
+          const playerResult = result[player!.id];
+          if (!playerResult) {
+            return null;
+          }
+          return (
+            <div className="cell" key={i}>
+              {playerResult.totalScore}
+            </div>
+          );
+        })}
+        <div className="small" />
+      </div>
+    );
+  };
+
+  private renderMoney = () => {
+    const game = this.state.game;
+    if (game == null || game.players == null || game.hands == null || game.hands.length === 0) {
+      return <div className="money" />;
+    }
+    const result = analyzeGameHands([game], new HandSummary());
+    return (
+      <div className="money">
+        <div className="header">💰 Money</div>
+        <div className="cells">
+          {game.players.map((player, i) => {
+            const playerResult = result[player!.id];
+            if (!playerResult) {
+              return null;
+            }
+            return (
+              <div className="cell" key={i}>
+                {playerResult.totalDelta}
+              </div>
+            );
+          })}
+          <div className="small" />
         </div>
-      );
-    });
+      </div>
+    );
   };
 
   private renderPlayerChooser() {

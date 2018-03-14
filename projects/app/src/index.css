@@ -88,5 +88,7 @@ a {
 }
 
 .th-nav {
-    padding: 5px 0 10px 0;
+    background: var(--base01);
+    border-bottom: 1px solid var(--base02);
+    padding: 10px 0 10px 5px;
 }

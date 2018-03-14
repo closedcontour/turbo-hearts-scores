@@ -180,6 +180,8 @@ export function getRouter() {
     const games = await GameModel.query()
       .eager("[hands,p1,p2,p3,p4,season]")
       .where("seasonId", "=", req.params.seasonId)
+      .orderBy("time", "desc")
+      .orderBy("id", "desc")
       .select();
     res.json(
       games

@@ -25,7 +25,7 @@ export class HandResult extends React.Component<HandResultProps, {}> {
         {this.props.hand.playerHands.map((_playerHand, i) => {
           return (
             <div key={i} className="score">
-              {result.scores[i]} {result.moonshot[i] && "🚀"}
+              {result.scores[i]} {result.moonshots[i] && "🚀"} {result.antiruns[i] && "💣"}
             </div>
           );
         })}

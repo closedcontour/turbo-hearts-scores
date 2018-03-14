@@ -1,0 +1,16 @@
+.game-result {
+    padding: 5px 0 5px 0;
+    display: flex;
+    border-bottom: 1px solid #f0f0f0;
+
+    & .player, & .invalid {
+        display: flex;
+        flex-direction: column;
+        flex: 1 0 0;
+    }
+
+    & .invalid {
+        font-size: 14px;
+        text-align: center;
+    }
+}

@@ -2,6 +2,7 @@ import { analyzeGames, IGame, ISeason, Scoreboard } from "@turbo-hearts-scores/s
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { Api } from "../api/transport";
+import { GameResult } from "./components/GameResult";
 
 interface SeasonPageProps extends RouteComponentProps<{ leagueId: string; seasonId: string }> {
   api: Api;
@@ -35,6 +36,13 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
           <a href={`/league/${params.leagueId}`}>← Back to {this.state.season.league.name}</a>
         </div>
         <h1>{this.state.season.name}</h1>
+        <h3>
+          Leaderboard (<a href={`/league/${params.leagueId}/season/${params.seasonId}/history`}>
+            History
+          </a>)
+        </h3>
+        {this.renderLeaderboard()}
+        <h3>Games</h3>
         {this.renderGames()}
         <div className="th-button" onClick={this.handleNewGame}>
           New Game
@@ -48,29 +56,27 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
     this.fetchGames();
   }
 
+  private renderLeaderboard() {
+    if (!this.state.seasonGames) {
+      return null;
+    }
+    return <div className="leaderboard">{this.renderScoreboard()}</div>;
+  }
+
   private renderGames() {
-    if (!this.state.season!.games) {
+    if (!this.state.seasonGames) {
       return null;
     }
     const params = this.props.match.params;
-    const games = this.state.season!.games!.map(game => {
+    const games = this.state.seasonGames.map(game => {
       return (
         <div key={game.id} className="game">
-          <a href={`/league/${params.leagueId}/season/${params.seasonId}/game/${game.id}`}>
-            Game {game.id}
-          </a>
+          <GameResult game={game} leagueId={params.leagueId} seasonId={params.seasonId} />
         </div>
       );
     });
     return (
       <div className="games">
-        <h3>
-          Leaderboard (<a href={`/league/${params.leagueId}/season/${params.seasonId}/history`}>
-            History
-          </a>)
-        </h3>
-        {this.renderScoreboard()}
-        <h3>Games</h3>
         <div className="scoreboard">{games}</div>
       </div>
     );

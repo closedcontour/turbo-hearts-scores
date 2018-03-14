@@ -46,7 +46,7 @@ export class HandPage extends React.Component<HandPageProps, HandPageState> {
             playerHand,
             this.state.hand!.players[i],
             result.scores[i],
-            result.moonshot[i],
+            result.moonshots[i],
             heartTotal,
           ),
         )}

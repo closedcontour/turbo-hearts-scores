@@ -1,5 +1,20 @@
 .th-season {
+
+    & h1 {
+        font-size: 24px;
+        padding: 5px;
+    }
+
+    & h3 {
+        padding: 5px;
+        border-bottom: 1px solid var(--base02);
+    }
+
     & .games {
         flex-grow: 1;
+    }
+
+    & .scoreboard {
+        padding: 5px;
     }
 }

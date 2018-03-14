@@ -64,8 +64,14 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
     });
     return (
       <div className="games">
+        <h3>
+          Leaderboard (<a href={`/league/${params.leagueId}/season/${params.seasonId}/history`}>
+            History
+          </a>)
+        </h3>
         {this.renderScoreboard()}
-        {games}
+        <h3>Games</h3>
+        <div className="scoreboard">{games}</div>
       </div>
     );
   }
@@ -77,15 +83,13 @@ export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState
     const scoreboard = analyzeGames(this.state.seasonGames, new Scoreboard());
     const values = Object.values(scoreboard);
     values.sort((a, b) => b.totalDelta - a.totalDelta);
-    const params = this.props.match.params;
     return (
       <div className="scoreboard">
-        {values.map(value => (
+        {values.map((value, i) => (
           <div key={value.name}>
-            {value.name} / {value.totalDelta}
+            {i === 0 && "👨‍🚀"} {i === values.length - 1 && "🐋"} {value.name} / {value.totalDelta}
           </div>
         ))}
-        <a href={`/league/${params.leagueId}/season/${params.seasonId}/history`}>History</a>
       </div>
     );
   }

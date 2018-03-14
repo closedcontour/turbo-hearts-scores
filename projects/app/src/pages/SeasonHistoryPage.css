@@ -7,9 +7,11 @@
     & .legend {
         padding: 0px 50px;
         display: flex;
+        flex-wrap: wrap;
 
         & .entry {
             margin-right: 20px;
+            margin-bottom: 5px;
             display: flex;
         }
 

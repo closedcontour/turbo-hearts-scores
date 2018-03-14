@@ -13,10 +13,14 @@
 
     & h3 {
         margin-top: 140px;
+        padding: 5px;
+        border-bottom: 1px solid var(--base02);
     }
 
     & .league-list {
         flex-grow: 1;
+        padding: 5px;
+        border-bottom: 1px solid var(--base02);
     }
 
     & .pad {

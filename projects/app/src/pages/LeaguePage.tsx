@@ -1,4 +1,5 @@
 import { ILeague, IPlayer, ISeason } from "@turbo-hearts-scores/shared";
+import classNames = require("classnames");
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { Api } from "../api/transport";
@@ -27,18 +28,39 @@ export class LeaguePage extends React.Component<LeaguePageProps, LeaguePageState
 
   public render() {
     return (
-      <div className="th-league">
-        <a href="/">Home</a>
+      <div className="th-league th-page">
+        <div className="th-nav">
+          <a href="/">← Back to Home</a>
+        </div>
         {this.state.league && <h1>{this.state.league.name}</h1>}
-        <h3>Choose a Season</h3>
-        {this.state.league && this.state.league.seasons!.map(this.renderSeason)}
-        <input type="text" value={this.state.newSeason} onChange={this.handleNewSeasonChange} />
-        <button onClick={this.handleNewSeason} disabled={this.state.newSeason.length === 0}>
-          Create a New Season
-        </button>
-        <h3>Players in this League</h3>
-        {this.state.league && this.state.league.players!.map(this.renderPlayer)}
-        {this.renderAddPlayer()}
+        <div className="side-by-side">
+          <div className="left">
+            <h3>Seasons</h3>
+            <div className="season-list">
+              {this.state.league && this.state.league.seasons!.map(this.renderSeason)}
+            </div>
+            <input
+              className="th-text-input"
+              type="text"
+              value={this.state.newSeason}
+              onChange={this.handleNewSeasonChange}
+              placeholder="Enter new season name"
+            />
+            <div
+              className={classNames("th-button", { invalid: this.state.newSeason.length === 0 })}
+              onClick={this.handleNewSeason}
+            >
+              New Season
+            </div>
+          </div>
+          <div className="right">
+            <h3>Players</h3>
+            <div className="player-list">
+              {this.state.league && this.state.league.players!.map(this.renderPlayer)}
+            </div>
+            {this.state.league && this.renderAddPlayer()}
+          </div>
+        </div>
       </div>
     );
   }
@@ -49,16 +71,21 @@ export class LeaguePage extends React.Component<LeaguePageProps, LeaguePageState
   }
 
   private renderAddPlayer() {
+    const playerIdsInLeague = new Set(this.state.league!.players!.map(p => p.id));
+    const addablePlayers = this.state.players.filter(p => !playerIdsInLeague.has(p.id));
     return (
       <div>
         <PlayerChooser
-          players={this.state.players}
+          players={addablePlayers}
           selectedPlayer={this.state.playerToAdd}
           onPlayerChanged={this.handlePlayerChooserChange}
         />
-        <button disabled={this.state.playerToAdd === undefined} onClick={this.handleAddPlayer}>
-          Add Player To League
-        </button>
+        <div
+          className={classNames("th-button", { invalid: this.state.playerToAdd == null })}
+          onClick={this.handleAddPlayer}
+        >
+          Add Player
+        </div>
       </div>
     );
   }

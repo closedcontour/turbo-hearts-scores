@@ -43,7 +43,7 @@ export class HomePage extends React.Component<HomePageProps, HomePageState> {
           className={classNames("th-button pad", { invalid: this.state.newLeague.length === 0 })}
           onClick={this.handleNewLeague}
         >
-          Create a New League
+          New League
         </div>
         <input
           className="th-text-input"
@@ -56,7 +56,7 @@ export class HomePage extends React.Component<HomePageProps, HomePageState> {
           className={classNames("th-button", { invalid: this.state.newPlayer.length === 0 })}
           onClick={this.handleNewPlayer}
         >
-          Create a New Player
+          New Player
         </div>
       </div>
     );

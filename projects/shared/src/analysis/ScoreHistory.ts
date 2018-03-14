@@ -30,6 +30,9 @@ export function gameValid(game: IGame) {
   return true;
 }
 
+/**
+ * This requires that games be iterated on in temporal order.
+ */
 export class ScoreHistory implements IGameAnalysis<ScoreHistoryResult> {
   public initialState() {
     return emptyResult();

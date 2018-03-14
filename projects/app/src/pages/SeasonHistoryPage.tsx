@@ -42,7 +42,7 @@ export class SeasonHistoryPage extends React.Component<
     if (!this.state.seasonGames) {
       return "Loading...";
     }
-    return <div className="th-season-history th-page">{this.renderHistory()}</div>;
+    return <div className="th-season-history">{this.renderHistory()}</div>;
   }
 
   public async componentDidMount() {
@@ -98,6 +98,7 @@ export class SeasonHistoryPage extends React.Component<
     const seasonId = this.props.match.params.seasonId;
     this.setState({ loading: true });
     const seasonGames = await this.props.api.fetchSeasonGames(seasonId);
+    seasonGames.sort((g1, g2) => g1.time - g2.time);
     this.setState({ loading: false, seasonGames });
   }
 }

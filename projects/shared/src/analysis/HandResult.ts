@@ -110,7 +110,7 @@ export function getHandResult(hand?: IHand): IHandResult {
     if (playerHand.tookTc) {
       points = chargedTc === 1 ? 4 * points : 2 * points;
     }
-    antiruns.push(playerHand.tookQs && playerHand.hearts === 12);
+    antiruns.push(playerHand.tookQs ? playerHand.hearts === 12 : false);
     scores.push(points);
   }
   return {

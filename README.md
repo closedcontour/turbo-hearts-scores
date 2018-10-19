@@ -7,9 +7,13 @@
 ### Run the server
 1. `cd projects/server`
 2. `yarn dev`
-If you want datas, grab a DB backup from https://scores.anti.run/backups/ and replace projects/server/dev.sqlite3
+If you want data, grab a DB backup from https://scores.anti.run/backups/ and replace projects/server/dev.sqlite3
 
 ### Run the front end
 1. `cd projects/app`
-2. `yarn dev
+2. `yarn dev`
 3. `open localhost:1234` 
+
+### Dev on shared
+1. `cd projects/shared`
+2. `yarn dev`

@@ -16,7 +16,7 @@ interface SeasonPageState {
   newSeason: string;
 }
 
-export class SeasonPage extends React.Component<SeasonPageProps, SeasonPageState> {
+export class SeasonPage extends React.PureComponent<SeasonPageProps, SeasonPageState> {
   public state: SeasonPageState = {
     loading: false,
     loadingGames: false,

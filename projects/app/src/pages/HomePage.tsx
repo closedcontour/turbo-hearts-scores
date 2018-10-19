@@ -16,7 +16,7 @@ interface HomePageState {
   newPlayer: string;
 }
 
-export class HomePage extends React.Component<HomePageProps, HomePageState> {
+export class HomePage extends React.PureComponent<HomePageProps, HomePageState> {
   public state: HomePageState = {
     loading: false,
     leagues: [],

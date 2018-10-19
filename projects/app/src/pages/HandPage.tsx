@@ -26,7 +26,7 @@ interface HandPageState {
   hand: IHand | undefined;
 }
 
-export class HandPage extends React.Component<HandPageProps, HandPageState> {
+export class HandPage extends React.PureComponent<HandPageProps, HandPageState> {
   public state: HandPageState = {
     loading: false,
     hand: undefined,

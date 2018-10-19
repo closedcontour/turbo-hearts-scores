@@ -17,7 +17,7 @@ interface LeaguePageState {
   playerToAdd: IPlayer | undefined;
 }
 
-export class LeaguePage extends React.Component<LeaguePageProps, LeaguePageState> {
+export class LeaguePage extends React.PureComponent<LeaguePageProps, LeaguePageState> {
   public state: LeaguePageState = {
     loading: false,
     league: undefined,

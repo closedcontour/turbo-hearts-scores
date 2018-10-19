@@ -1,4 +1,4 @@
-import { analyzeGames, IGame } from "@turbo-hearts-scores/shared";
+import { analyzeGames, IGame, PlayerSet } from "@turbo-hearts-scores/shared";
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { VictoryChart, VictoryLine, VictoryTooltip, VictoryVoronoiContainer } from "victory";
@@ -13,6 +13,7 @@ interface SeasonHistoryPageProps
 interface SeasonHistoryPageState {
   loading: boolean;
   seasonGames: IGame[];
+  players: Set<string>;
 }
 
 const COLORS = [
@@ -29,13 +30,14 @@ const COLORS = [
 ];
 
 // TODO: this should be a generic GameHistoryPage with a season loader
-export class SeasonHistoryPage extends React.Component<
+export class SeasonHistoryPage extends React.PureComponent<
   SeasonHistoryPageProps,
   SeasonHistoryPageState
 > {
   public state: SeasonHistoryPageState = {
     loading: false,
     seasonGames: [],
+    players: new Set<string>(),
   };
 
   public render() {
@@ -59,10 +61,14 @@ export class SeasonHistoryPage extends React.Component<
         <div className="chart">
           <VictoryChart width={1000} height={500} containerComponent={<VictoryVoronoiContainer />}>
             {Object.keys(scoreHistory.history).map((player, playerIndex) => {
+              const playerName = scoreHistory.history[player].name;
+              if (!this.state.players.has(playerName)) {
+                return null;
+              }
               const data = scoreHistory.history[player].deltaHistory.map((d, i) => ({
                 x: i,
                 y: d,
-                label: `${scoreHistory.history[player].name} ${d}`,
+                label: `${playerName} ${d}`,
               }));
               const style = {
                 data: { stroke: COLORS[playerIndex % COLORS.length] },
@@ -82,10 +88,25 @@ export class SeasonHistoryPage extends React.Component<
         <div className="legend">
           {Object.keys(scoreHistory.history).map((player, playerIndex) => {
             const color = COLORS[playerIndex % COLORS.length];
+            const playerName = scoreHistory.history[player].name;
+            const togglePlayer = () => {
+              if (this.state.players.has(playerName)) {
+                this.state.players.delete(playerName);
+              } else {
+                this.state.players.add(playerName);
+              }
+              this.forceUpdate();
+            };
             return (
-              <span className="entry" key={player}>
-                <span className="sample" style={{ backgroundColor: color }} />
-                <span className="label">{scoreHistory.history[player].name}</span>
+              <span className="entry" key={player} onClick={togglePlayer}>
+                <span
+                  className="sample"
+                  style={{
+                    backgroundColor: color,
+                    opacity: this.state.players.has(playerName) ? 1 : 0.2,
+                  }}
+                />
+                <span className="label">{playerName}</span>
               </span>
             );
           })}
@@ -99,6 +120,9 @@ export class SeasonHistoryPage extends React.Component<
     this.setState({ loading: true });
     const seasonGames = await this.props.api.fetchSeasonGames(seasonId);
     seasonGames.sort((g1, g2) => g1.time - g2.time);
-    this.setState({ loading: false, seasonGames });
+    const players = new Set<string>();
+    const playerSet = analyzeGames(seasonGames, new PlayerSet());
+    playerSet.players.forEach(player => players.add(player.name));
+    this.setState({ loading: false, seasonGames, players });
   }
 }

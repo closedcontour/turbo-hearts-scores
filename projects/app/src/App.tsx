@@ -13,7 +13,7 @@ export interface AppProps {
   api: Api;
 }
 
-export class App extends React.Component<AppProps, {}> {
+export class App extends React.PureComponent<AppProps, {}> {
   public render() {
     const homePage = (props: RouteComponentProps<any>) => (
       <HomePage {...props} api={this.props.api} />

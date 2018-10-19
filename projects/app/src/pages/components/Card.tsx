@@ -23,7 +23,7 @@ export interface CardProps {
   onClick?(): void;
 }
 
-export class Card extends React.Component<CardProps, {}> {
+export class Card extends React.PureComponent<CardProps, {}> {
   public render() {
     const suit = suitMap[this.props.suit];
     return (

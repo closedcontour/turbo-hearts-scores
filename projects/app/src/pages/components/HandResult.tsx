@@ -8,7 +8,7 @@ interface HandResultProps {
   hand: IHand;
 }
 
-export class HandResult extends React.Component<HandResultProps, {}> {
+export class HandResult extends React.PureComponent<HandResultProps, {}> {
   public render() {
     const result = getHandResult(this.props.hand);
     return result.valid ? this.renderHand(result) : this.renderInvalid();

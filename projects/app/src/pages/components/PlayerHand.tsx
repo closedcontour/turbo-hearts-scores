@@ -12,7 +12,7 @@ interface PlayerHandProps {
   onChange(delta: Partial<IPlayerHand> & Pick<IPlayerHand, "index">): void;
 }
 
-export class PlayerHand extends React.Component<PlayerHandProps, {}> {
+export class PlayerHand extends React.PureComponent<PlayerHandProps, {}> {
   public render() {
     return (
       <div className="th-player-hand">

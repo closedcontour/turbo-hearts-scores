@@ -26,7 +26,7 @@ interface GamePageState {
   started: boolean;
 }
 
-export class GamePage extends React.Component<GamePageProps, GamePageState> {
+export class GamePage extends React.PureComponent<GamePageProps, GamePageState> {
   public state: GamePageState = {
     loading: false,
     game: undefined,

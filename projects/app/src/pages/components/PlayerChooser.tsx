@@ -1,5 +1,5 @@
+import { IPlayer } from "@turbo-hearts-scores/shared";
 import * as React from "react";
-import { IPlayer } from "../../api/api";
 
 export interface PlayerChooserProps {
   players: IPlayer[];
@@ -7,7 +7,7 @@ export interface PlayerChooserProps {
   onPlayerChanged(player: IPlayer | undefined): void;
 }
 
-export class PlayerChooser extends React.Component<PlayerChooserProps, {}> {
+export class PlayerChooser extends React.PureComponent<PlayerChooserProps, {}> {
   public render() {
     const selectedId = this.props.selectedPlayer ? this.props.selectedPlayer.id : "";
     return (

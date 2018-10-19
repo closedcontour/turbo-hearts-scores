@@ -49,5 +49,6 @@ app.use("/", (req, res, next) => {
 
 // start our server
 server.listen(process.env.PORT || 7999, () => {
+  // tslint:disable-next-line:no-console
   console.log(`Server started on port ${server.address().port} :)`);
 });

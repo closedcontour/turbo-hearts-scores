@@ -7,7 +7,7 @@ interface GameResultProps {
   game: IGame;
 }
 
-export class GameResult extends React.Component<GameResultProps, {}> {
+export class GameResult extends React.PureComponent<GameResultProps, {}> {
   public render() {
     const { leagueId, seasonId, game } = this.props;
     const results = getGameResult(game);

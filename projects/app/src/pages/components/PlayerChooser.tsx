@@ -4,7 +4,7 @@ import * as React from "react";
 export interface PlayerChooserProps {
   players: IPlayer[];
   selectedPlayer: IPlayer | undefined | null;
-  onPlayerChanged(player: IPlayer | null): void;
+  onPlayerChanged(player: IPlayer | undefined): void;
 }
 
 export class PlayerChooser extends React.PureComponent<PlayerChooserProps, {}> {
@@ -27,6 +27,6 @@ export class PlayerChooser extends React.PureComponent<PlayerChooserProps, {}> {
   private handlePlayerChooserChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const playerId = event.target.value;
     const player = this.props.players.find(p => p.id.toString() === playerId);
-    this.props.onPlayerChanged(playerId === "" || !player ? null : player);
+    this.props.onPlayerChanged(playerId === "" ? undefined : player);
   };
 }

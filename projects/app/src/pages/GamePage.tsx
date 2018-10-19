@@ -160,12 +160,12 @@ export class GamePage extends React.PureComponent<GamePageProps, GamePageState> 
     if (this.state.loading || !this.state.leaguePlayers || !game || game.players == null) {
       return <div className="th-game">Loading...</div>;
     }
-    const handlePlayerChanged = (index: number) => (player: IPlayer | null) => {
+    const handlePlayerChanged = (index: number) => (player: IPlayer | undefined) => {
       const newGame = {
         ...game,
         players: game.players!.slice(),
       };
-      newGame.players[index] = player;
+      newGame.players[index] = player || null;
       this.setState({ game: newGame });
     };
     const choosers: JSX.Element[] = [];

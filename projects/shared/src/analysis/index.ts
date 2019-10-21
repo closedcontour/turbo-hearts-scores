@@ -4,3 +4,5 @@ export * from "./HandResult";
 export * from "./GameResult";
 export * from "./PlayerSet";
 export * from "./Scoreboard";
+export * from "./vsDeltaHistory";
+export * from "./vsHandDelta";

@@ -31,6 +31,7 @@ export class LeaguePage extends React.PureComponent<LeaguePageProps, LeaguePageS
       <div className="th-league th-page">
         <div className="th-nav">
           <a href="/">← Back to Home</a>
+          <a href={`/league/${this.props.match.params.leagueId}/history`}>History</a>
         </div>
         {this.state.league && <h1>{this.state.league.name}</h1>}
         <div className="side-by-side">

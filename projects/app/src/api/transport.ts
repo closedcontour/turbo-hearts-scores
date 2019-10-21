@@ -33,6 +33,27 @@ export class Api {
     });
   }
 
+  public fetchPlayerGames(playerId: string) {
+    const url = `${this.baseUrl}/player/${playerId}/games`;
+    return this.get(url).then((games: IGame[]) => {
+      return games;
+    });
+  }
+
+  public fetchPlayeVsGames(playerId: string, playerId2: string) {
+    const url = `${this.baseUrl}/player/${playerId}/vs/${playerId2}/games`;
+    return this.get(url).then((games: IGame[]) => {
+      return games;
+    });
+  }
+
+  public fetchLeagueGames(leagueId: string) {
+    const url = `${this.baseUrl}/league/${leagueId}/games`;
+    return this.get(url).then((games: IGame[]) => {
+      return games;
+    });
+  }
+
   public fetchSeasonGames(seasonId: string) {
     const url = `${this.baseUrl}/season/${seasonId}/games`;
     return this.get(url).then((games: IGame[]) => {

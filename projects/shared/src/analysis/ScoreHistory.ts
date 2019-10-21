@@ -8,6 +8,7 @@ export interface ScoreHistoryResult {
   history: {
     [key: string]: {
       name: string;
+      id: string;
       deltaHistory: number[];
     };
   };
@@ -44,17 +45,18 @@ export class ScoreHistory implements IGameAnalysis<ScoreHistoryResult> {
     }
     const handSummary = analyzeHands(game.hands!, new HandSummary());
     const allPlayers = new Set([...Object.keys(current.history), ...Object.keys(handSummary)]);
-    for (const player of allPlayers) {
-      if (handSummary.hasOwnProperty(player)) {
-        let entry = current.history[player];
+    for (const playerId of allPlayers) {
+      if (handSummary.hasOwnProperty(playerId)) {
+        let entry = current.history[playerId];
         if (!entry) {
           entry = {
-            name: game.players!.find(p => p!.id === player)!.name,
+            id: playerId,
+            name: game.players!.find(p => p!.id === playerId)!.name,
             deltaHistory: new Array(current.games + 1).fill(0),
           };
-          current.history[player] = entry;
+          current.history[playerId] = entry;
         }
-        const delta = handSummary[player].totalDelta;
+        const delta = handSummary[playerId].totalDelta;
         if (current.games === 0) {
           entry.deltaHistory.push(delta);
         } else {
@@ -62,7 +64,7 @@ export class ScoreHistory implements IGameAnalysis<ScoreHistoryResult> {
         }
       } else {
         // Player not in game, propagate last value
-        const d = current.history[player].deltaHistory;
+        const d = current.history[playerId].deltaHistory;
         d.push(d[d.length - 1]);
       }
     }

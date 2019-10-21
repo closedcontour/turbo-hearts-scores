@@ -1,19 +1,20 @@
 import { analyzeGames, IGame, PlayerSet } from "@turbo-hearts-scores/shared";
 import * as React from "react";
-import { RouteComponentProps } from "react-router";
 import { VictoryChart, VictoryLine, VictoryTooltip, VictoryVoronoiContainer } from "victory";
 import { ScoreHistory } from "../../../shared/src/analysis/ScoreHistory";
-import { Api } from "../api/transport";
+import { GameLoader } from "../api/gameLoader";
 
-interface SeasonHistoryPageProps
-  extends RouteComponentProps<{ leagueId: string; seasonId: string }> {
-  api: Api;
+interface GameHistoryPageProps {
+  gameLoader: GameLoader;
+  showPlayers?: string[];
 }
 
-interface SeasonHistoryPageState {
+interface GameHistoryPageState {
   loading: boolean;
   seasonGames: IGame[];
   players: Set<string>;
+  width: number;
+  height: number;
 }
 
 const COLORS = [
@@ -29,22 +30,23 @@ const COLORS = [
   "#7157D9",
 ];
 
-// TODO: this should be a generic GameHistoryPage with a season loader
-export class SeasonHistoryPage extends React.PureComponent<
-  SeasonHistoryPageProps,
-  SeasonHistoryPageState
+export class GameHistoryPage extends React.PureComponent<
+  GameHistoryPageProps,
+  GameHistoryPageState
 > {
-  public state: SeasonHistoryPageState = {
+  public state: GameHistoryPageState = {
     loading: false,
     seasonGames: [],
     players: new Set<string>(),
+    width: 1000,
+    height: 500,
   };
 
   public render() {
     if (!this.state.seasonGames) {
       return "Loading...";
     }
-    return <div className="th-season-history">{this.renderHistory()}</div>;
+    return this.renderHistory();
   }
 
   public async componentDidMount() {
@@ -56,11 +58,20 @@ export class SeasonHistoryPage extends React.PureComponent<
       return;
     }
     const scoreHistory = analyzeGames(this.state.seasonGames, new ScoreHistory());
+    const scoresByPlayerOverTime = Object.keys(scoreHistory.history).filter(
+      player =>
+        this.props.showPlayers === undefined ||
+        this.props.showPlayers.includes(scoreHistory.history[player].id),
+    );
     return (
-      <div>
-        <div className="chart">
-          <VictoryChart width={1000} height={500} containerComponent={<VictoryVoronoiContainer />}>
-            {Object.keys(scoreHistory.history).map((player, playerIndex) => {
+      <div className="th-season-history">
+        <div className="chart" ref={this.setChartRef}>
+          <VictoryChart
+            width={this.state.width}
+            height={this.state.height}
+            containerComponent={<VictoryVoronoiContainer />}
+          >
+            {scoresByPlayerOverTime.map((player, playerIndex) => {
               const playerName = scoreHistory.history[player].name;
               if (!this.state.players.has(playerName)) {
                 return null;
@@ -86,7 +97,7 @@ export class SeasonHistoryPage extends React.PureComponent<
           </VictoryChart>
         </div>
         <div className="legend">
-          {Object.keys(scoreHistory.history).map((player, playerIndex) => {
+          {scoresByPlayerOverTime.map((player, playerIndex) => {
             const color = COLORS[playerIndex % COLORS.length];
             const playerName = scoreHistory.history[player].name;
             const togglePlayer = () => {
@@ -116,13 +127,28 @@ export class SeasonHistoryPage extends React.PureComponent<
   }
 
   private async fetchGames() {
-    const seasonId = this.props.match.params.seasonId;
     this.setState({ loading: true });
-    const seasonGames = await this.props.api.fetchSeasonGames(seasonId);
-    seasonGames.sort((g1, g2) => g1.time - g2.time);
+    const allGames = await this.props.gameLoader.loadGames();
+    allGames.sort((g1, g2) => g1.time - g2.time);
+
     const players = new Set<string>();
-    const playerSet = analyzeGames(seasonGames, new PlayerSet());
-    playerSet.players.forEach(player => players.add(player.name));
-    this.setState({ loading: false, seasonGames, players });
+    const playerSet = analyzeGames(allGames, new PlayerSet());
+    Array.from(playerSet.players)
+      .filter(
+        player =>
+          this.props.showPlayers === undefined || this.props.showPlayers.includes(player.id),
+      )
+      .forEach(player => players.add(player.name));
+
+    this.setState({ loading: false, seasonGames: allGames, players });
   }
+
+  private setChartRef = (ref: HTMLElement | null) => {
+    if (ref != null) {
+      this.setState({ width: ref.clientWidth, height: ref.clientHeight });
+      window.addEventListener("resize", () => {
+        this.setState({ width: ref.clientWidth, height: ref.clientHeight });
+      });
+    }
+  };
 }

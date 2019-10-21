@@ -139,6 +139,54 @@ export function getRouter() {
     res.json(dbPlayerToApi(player));
   });
 
+  router.route("/player/:playerId/games").get(async (req, res) => {
+    const games = await GameModel.query()
+      .eager("[hands,p1,p2,p3,p4,season]")
+      .where(q =>
+        q.where("p1Id", "=", req.params.playerId)
+          .orWhere("p2Id", "=", req.params.playerId)
+          .orWhere("p3Id", "=", req.params.playerId)
+          .orWhere("p4Id", "=", req.params.playerId)
+      )
+      .orderBy("time", "desc")
+      .orderBy("id", "desc")
+      .select();
+    res.json(
+      games
+        .filter(game => !game.deleted)
+        .map((game: any) =>
+          dbGameToApi(game, game.season, [game.p1, game.p2, game.p3, game.p4], game.hands),
+        ),
+    );
+  });
+
+  router.route("/player/:playerId/vs/:playerId2/games").get(async (req, res) => {
+    const games = await GameModel.query()
+      .eager("[hands,p1,p2,p3,p4,season]")
+      .where(q =>
+        q.where("p1Id", "=", req.params.playerId)
+          .orWhere("p2Id", "=", req.params.playerId)
+          .orWhere("p3Id", "=", req.params.playerId)
+          .orWhere("p4Id", "=", req.params.playerId)
+      )
+      .andWhere(q =>
+        q.where("p1Id", "=", req.params.playerId2)
+          .orWhere("p2Id", "=", req.params.playerId2)
+          .orWhere("p3Id", "=", req.params.playerId2)
+          .orWhere("p4Id", "=", req.params.playerId2)
+      )
+      .orderBy("time", "desc")
+      .orderBy("id", "desc")
+      .select();
+    res.json(
+      games
+        .filter(game => !game.deleted)
+        .map((game: any) =>
+          dbGameToApi(game, game.season, [game.p1, game.p2, game.p3, game.p4], game.hands),
+        ),
+    );
+  });
+
   router.route("/players").get(async (_req, res) => {
     const players = await PlayerModel.query()
       .select()
@@ -165,6 +213,21 @@ export function getRouter() {
       .select();
     const league = leagues[0] as any;
     res.json(dbLeagueToApi(league, league.seasons, league.players));
+  });
+
+  router.route("/league/:leagueId/games").get(async (req, res) => {
+    const games = await GameModel.query()
+      .eager("[hands,p1,p2,p3,p4,season]")
+      .eagerAlgorithm(GameModel.JoinEagerAlgorithm)
+      .where("season.leagueId", '=', req.params.leagueId)
+      .orderBy("time", "desc")
+      .orderBy("id", "desc")
+      .select();
+    res.json(
+      games
+        .filter(game => !game.deleted)
+        .map((game: any) => dbGameToApi(game, game.season, [game.p1, game.p2, game.p3, game.p4], game.hands)),
+    );
   });
 
   router.route("/season/:seasonId").get(async (req, res) => {

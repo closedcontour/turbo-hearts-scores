@@ -12,6 +12,7 @@ import { HandPage } from "./pages/HandPage";
 import { HomePage } from "./pages/HomePage";
 import { LeaguePage } from "./pages/LeaguePage";
 import { SeasonPage } from "./pages/SeasonPage";
+import { VsPage } from "./pages/VsPage";
 
 export interface AppProps {
   api: Api;
@@ -49,6 +50,22 @@ export class App extends React.PureComponent<AppProps, {}> {
         showPlayers={[props.match.params.playerId]}
       />
     );
+    const playerVsHistoryPage = (
+      props: RouteComponentProps<{ playerId: string; playerId2: string }>,
+    ) => (
+      <VsPage
+        {...props}
+        gameLoader={
+          new PlayerVsGameLoader(
+            this.props.api,
+            props.match.params.playerId,
+            props.match.params.playerId2,
+          )
+        }
+        p1Id={props.match.params.playerId}
+        p2Id={props.match.params.playerId2}
+      />
+    );
     const gamePage = (props: RouteComponentProps<any>) => (
       <GamePage {...props} api={this.props.api} />
     );
@@ -78,6 +95,11 @@ export class App extends React.PureComponent<AppProps, {}> {
             render={handPage}
           />
           <Route exact={true} path="/player/:playerId/history" render={playerHistoryPage} />
+          <Route
+            exact={true}
+            path="/player/:playerId/vs/:playerId2/history"
+            render={playerVsHistoryPage}
+          />
         </div>
       </Router>
     );

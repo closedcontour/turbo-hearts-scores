@@ -11,7 +11,7 @@ interface GameHistoryPageProps {
 
 interface GameHistoryPageState {
   loading: boolean;
-  seasonGames: IGame[];
+  games: IGame[];
   players: Set<string>;
   width: number;
   height: number;
@@ -36,14 +36,14 @@ export class GameHistoryPage extends React.PureComponent<
 > {
   public state: GameHistoryPageState = {
     loading: false,
-    seasonGames: [],
+    games: [],
     players: new Set<string>(),
     width: 1000,
     height: 500,
   };
 
   public render() {
-    if (!this.state.seasonGames) {
+    if (!this.state.games) {
       return "Loading...";
     }
     return this.renderHistory();
@@ -54,17 +54,17 @@ export class GameHistoryPage extends React.PureComponent<
   }
 
   private renderHistory() {
-    if (!this.state.seasonGames) {
+    if (!this.state.games) {
       return;
     }
-    const scoreHistory = analyzeGames(this.state.seasonGames, new ScoreHistory());
+    const scoreHistory = analyzeGames(this.state.games, new ScoreHistory());
     const scoresByPlayerOverTime = Object.keys(scoreHistory.history).filter(
       player =>
         this.props.showPlayers === undefined ||
         this.props.showPlayers.includes(scoreHistory.history[player].id),
     );
     return (
-      <div className="th-season-history">
+      <div className="th-game-history">
         <div className="chart" ref={this.setChartRef}>
           <VictoryChart
             width={this.state.width}
@@ -140,7 +140,7 @@ export class GameHistoryPage extends React.PureComponent<
       )
       .forEach(player => players.add(player.name));
 
-    this.setState({ loading: false, seasonGames: allGames, players });
+    this.setState({ loading: false, games: allGames, players });
   }
 
   private setChartRef = (ref: HTMLElement | null) => {

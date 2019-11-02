@@ -13,6 +13,7 @@ Theme currently duplicated in .postcssrc.
 @import "./pages/GamePage.css";
 @import "./pages/HandPage.css";
 @import "./pages/VsPage.css";
+@import "./pages/stats/StatsPage.css";
 @import "./pages/components/HandResult.css";
 @import "./pages/components/GameResult.css";
 @import "./pages/components/PlayerHand.css";

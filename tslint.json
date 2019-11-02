@@ -24,6 +24,7 @@
         "ban-keywords",
         "check-format"
       ]
-    }
+    },
+    "forin": false
   }
 }

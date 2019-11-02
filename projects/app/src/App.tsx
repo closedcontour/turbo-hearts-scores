@@ -12,6 +12,7 @@ import { HandPage } from "./pages/HandPage";
 import { HomePage } from "./pages/HomePage";
 import { LeaguePage } from "./pages/LeaguePage";
 import { SeasonPage } from "./pages/SeasonPage";
+import { StatsPage } from "./pages/stats/StatsPage";
 import { VsPage } from "./pages/VsPage";
 
 export interface AppProps {
@@ -37,8 +38,22 @@ export class App extends React.PureComponent<AppProps, {}> {
         gameLoader={new SeasonGameLoader(this.props.api, props.match.params.seasonId)}
       />
     );
+    const seasonStatsPage = (
+      props: RouteComponentProps<{ leagueId: string; seasonId: string }>,
+    ) => (
+      <StatsPage
+        {...props}
+        gameLoader={new SeasonGameLoader(this.props.api, props.match.params.seasonId)}
+      />
+    );
     const leagueHistoryPage = (props: RouteComponentProps<{ leagueId: string }>) => (
       <GameHistoryPage
+        {...props}
+        gameLoader={new LeagueGameLoader(this.props.api, props.match.params.leagueId)}
+      />
+    );
+    const leagueStatsPage = (props: RouteComponentProps<{ leagueId: string }>) => (
+      <StatsPage
         {...props}
         gameLoader={new LeagueGameLoader(this.props.api, props.match.params.leagueId)}
       />
@@ -78,6 +93,7 @@ export class App extends React.PureComponent<AppProps, {}> {
           <Route exact={true} path="/" render={homePage} />
           <Route exact={true} path="/league/:leagueId" render={leaguePage} />
           <Route exact={true} path="/league/:leagueId/history" render={leagueHistoryPage} />
+          <Route exact={true} path="/league/:leagueId/stats" render={leagueStatsPage} />
           <Route exact={true} path="/league/:leagueId/season/:seasonId" render={seasonPage} />
           <Route
             exact={true}
@@ -93,6 +109,11 @@ export class App extends React.PureComponent<AppProps, {}> {
             exact={true}
             path="/league/:leagueId/season/:seasonId/game/:gameId/hand/:handId"
             render={handPage}
+          />
+          <Route
+            exact={true}
+            path="/league/:leagueId/season/:seasonId/stats"
+            render={seasonStatsPage}
           />
           <Route exact={true} path="/player/:playerId/history" render={playerHistoryPage} />
           <Route

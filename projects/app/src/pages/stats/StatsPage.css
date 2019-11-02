@@ -1,0 +1,20 @@
+.stats-page {
+  margin: 20px;
+
+  & b {
+    font-weight: 600;
+  }
+
+  & ul {
+    list-style: circle;
+    margin: 20px 40px;
+  }
+
+  & li {
+      line-height: 30px;
+  }
+
+  & .th-card {
+    margin-right: 2px;
+  }
+}

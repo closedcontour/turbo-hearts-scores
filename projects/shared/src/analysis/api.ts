@@ -17,8 +17,8 @@ export function analyzeGames<R>(games: IGame[], analysis: IGameAnalysis<R>): R {
   return current;
 }
 
-export function analyzeHands<R>(hands: IHand[], analysis: IHandAnalysis<R>): R {
-  let current = analysis.initialState();
+export function analyzeHands<R>(hands: IHand[], analysis: IHandAnalysis<R>, initialState?: R): R {
+  let current = initialState === undefined ? analysis.initialState() : initialState;
   for (const hand of hands) {
     current = analysis.analyze(current, hand);
   }

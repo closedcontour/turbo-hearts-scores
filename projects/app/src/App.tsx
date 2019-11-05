@@ -12,6 +12,7 @@ import { HandPage } from "./pages/HandPage";
 import { HomePage } from "./pages/HomePage";
 import { LeaguePage } from "./pages/LeaguePage";
 import { SeasonPage } from "./pages/SeasonPage";
+import { PlayerStatsPage } from "./pages/stats/PlayerStatsPage";
 import { StatsPage } from "./pages/stats/StatsPage";
 import { VsPage } from "./pages/VsPage";
 
@@ -58,6 +59,24 @@ export class App extends React.PureComponent<AppProps, {}> {
         gameLoader={new LeagueGameLoader(this.props.api, props.match.params.leagueId)}
       />
     );
+    const playerStatsPage = (
+      props: RouteComponentProps<{
+        seasonId: string | undefined;
+        playerId: string;
+      }>,
+    ) => (
+      <PlayerStatsPage
+        {...props}
+        playerId={props.match.params.playerId}
+        gameLoader={
+          new PlayerGameLoader(
+            this.props.api,
+            props.match.params.playerId,
+            props.match.params.seasonId,
+          )
+        }
+      />
+    );
     const playerHistoryPage = (props: RouteComponentProps<{ playerId: string }>) => (
       <GameHistoryPage
         {...props}
@@ -95,6 +114,11 @@ export class App extends React.PureComponent<AppProps, {}> {
           <Route exact={true} path="/league/:leagueId/history" render={leagueHistoryPage} />
           <Route exact={true} path="/league/:leagueId/stats" render={leagueStatsPage} />
           <Route exact={true} path="/league/:leagueId/season/:seasonId" render={seasonPage} />
+          <Route
+            exact={true}
+            path="/league/:leagueId/season/:seasonId/player/:playerId/stats"
+            render={playerStatsPage}
+          />
           <Route
             exact={true}
             path="/league/:leagueId/season/:seasonId/history"

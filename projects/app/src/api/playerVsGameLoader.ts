@@ -14,6 +14,6 @@ export class PlayerVsGameLoader implements GameLoader {
   }
 
   public loadGames(): Promise<IGame[]> {
-    return this.api.fetchPlayeVsGames(this.playerId, this.playerId2);
+    return this.api.fetchPlayerVsGames(this.playerId, this.playerId2);
   }
 }

@@ -1,5 +1,6 @@
 import { IGame, IHand, ILeague, IPlayer, ISeason, Pass } from "@turbo-hearts-scores/shared";
 import * as express from "express";
+import { Request, Response } from "express-serve-static-core";
 import { GameModel } from "./models/Game";
 import { HandModel } from "./models/Hand";
 import { LeagueModel } from "./models/League";
@@ -131,34 +132,47 @@ function dbLeagueToApi(
   };
 }
 
+async function getPlayerGames(req: Request, res: Response) {
+  const games = await GameModel.query()
+    .eager("[hands,p1,p2,p3,p4,season]")
+    .where(q =>
+      q
+        .where("p1Id", "=", req.params.playerId)
+        .orWhere("p2Id", "=", req.params.playerId)
+        .orWhere("p3Id", "=", req.params.playerId)
+        .orWhere("p4Id", "=", req.params.playerId),
+    )
+    .orderBy("time", "desc")
+    .orderBy("id", "desc")
+    .select();
+  res.json(
+    games
+      .filter(game => !game.deleted)
+      .filter(
+        game => req.params.seasonId === undefined || game.seasonId === Number(req.params.seasonId),
+      )
+      .map((game: any) =>
+        dbGameToApi(game, game.season, [game.p1, game.p2, game.p3, game.p4], game.hands),
+      ),
+  );
+}
+
 export function getRouter() {
   const router = express.Router();
 
   router.route("/player").post(async (req, res) => {
-    const player = await PlayerModel.query().insertAndFetch({ name: req.body.name });
+    const player = await PlayerModel.query().insertAndFetch({
+      name: req.body.name,
+    });
     res.json(dbPlayerToApi(player));
   });
 
   router.route("/player/:playerId/games").get(async (req, res) => {
-    const games = await GameModel.query()
-      .eager("[hands,p1,p2,p3,p4,season]")
-      .where(q =>
-        q
-          .where("p1Id", "=", req.params.playerId)
-          .orWhere("p2Id", "=", req.params.playerId)
-          .orWhere("p3Id", "=", req.params.playerId)
-          .orWhere("p4Id", "=", req.params.playerId),
-      )
-      .orderBy("time", "desc")
-      .orderBy("id", "desc")
-      .select();
-    res.json(
-      games
-        .filter(game => !game.deleted)
-        .map((game: any) =>
-          dbGameToApi(game, game.season, [game.p1, game.p2, game.p3, game.p4], game.hands),
-        ),
-    );
+    getPlayerGames(req, res);
+  });
+
+  router.route("/player/:playerId/season/:seasonId/games").get(async (req, res) => {
+    getPlayerGames(req, res);
   });
 
   router.route("/player/:playerId/vs/:playerId2/games").get(async (req, res) => {
@@ -205,7 +219,9 @@ export function getRouter() {
   });
 
   router.route("/league").post(async (req, res) => {
-    const league = await LeagueModel.query().insertAndFetch({ name: req.body.name });
+    const league = await LeagueModel.query().insertAndFetch({
+      name: req.body.name,
+    });
     res.json(dbLeagueToApi(league));
   });
 

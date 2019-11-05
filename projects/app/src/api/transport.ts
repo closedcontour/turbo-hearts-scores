@@ -40,7 +40,14 @@ export class Api {
     });
   }
 
-  public fetchPlayeVsGames(playerId: string, playerId2: string) {
+  public fetchPlayerSeasonGames(playerId: string, seasonId: string) {
+    const url = `${this.baseUrl}/player/${playerId}/season/${seasonId}/games`;
+    return this.get(url).then((games: IGame[]) => {
+      return games;
+    });
+  }
+
+  public fetchPlayerVsGames(playerId: string, playerId2: string) {
     const url = `${this.baseUrl}/player/${playerId}/vs/${playerId2}/games`;
     return this.get(url).then((games: IGame[]) => {
       return games;

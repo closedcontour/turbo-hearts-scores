@@ -3,15 +3,13 @@ import { GameLoader } from "./gameLoader";
 import { Api } from "./transport";
 
 export class PlayerGameLoader implements GameLoader {
-  private api: Api;
-  private playerId: string;
-
-  constructor(api: Api, playerId: string) {
-    this.api = api;
-    this.playerId = playerId;
-  }
+  constructor(private api: Api, private playerId: string, private seasonId?: string) {}
 
   public loadGames(): Promise<IGame[]> {
-    return this.api.fetchPlayerGames(this.playerId);
+    if (this.seasonId === undefined) {
+      return this.api.fetchPlayerGames(this.playerId);
+    } else {
+      return this.api.fetchPlayerSeasonGames(this.playerId, this.seasonId);
+    }
   }
 }

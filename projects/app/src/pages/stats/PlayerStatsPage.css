@@ -1,0 +1,17 @@
+.player-stats-page {
+  margin: 20px;
+
+  & .game {
+    margin-bottom: 20px;
+  }
+
+  & .hand,
+  & .players {
+    display: flex;
+  }
+
+  & .score,
+  & .player {
+    width: 100px;
+  }
+}

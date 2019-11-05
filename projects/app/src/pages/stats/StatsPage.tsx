@@ -53,7 +53,8 @@ export class StatsPage extends React.PureComponent<StatsPageProps, StatsPageStat
           <li>
             The <Card rank="Q" suit="SPADES" /> was charged in{" "}
             {this.renderPercent(stats.qsCharges, stats.hands)}, and was taken by the charger{" "}
-            {this.renderPercent(stats.tookOwnQsCharge, stats.qsCharges)} of the time.
+            {this.renderPercent(stats.tookOwnQsCharge, stats.qsCharges)} of the time. It was worth
+            it {this.renderPercent(stats.qsChargeWorthIt, stats.qsCharges)} of the time.
           </li>
           <li>
             The <Card rank="J" suit="DIAMONDS" /> was charged in{" "}
@@ -63,11 +64,13 @@ export class StatsPage extends React.PureComponent<StatsPageProps, StatsPageStat
           <li>
             The <Card rank="10" suit="CLUBS" /> was charged in{" "}
             {this.renderPercent(stats.tcCharges, stats.hands)}, and was taken by the charger{" "}
-            {this.renderPercent(stats.tookOwnTcCharge, stats.tcCharges)} of the time.
+            {this.renderPercent(stats.tookOwnTcCharge, stats.tcCharges)} of the time. It was worth
+            it {this.renderPercent(stats.tcChargeWorthIt, stats.tcCharges)} of the time.
           </li>
           <li>
             The <Card rank="A" suit="HEARTS" /> was charged in{" "}
-            {this.renderPercent(stats.ahCharges, stats.hands)}.
+            {this.renderPercent(stats.ahCharges, stats.hands)}. It was worth it{" "}
+            {this.renderPercent(stats.ahChargeWorthIt, stats.ahCharges)} of the time.
           </li>
           <li>
             The score standard deviation was <b>{stats.handScoreStdDev.toFixed(1)}</b>.

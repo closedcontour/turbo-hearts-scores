@@ -121,6 +121,11 @@ export class App extends React.PureComponent<AppProps, {}> {
           />
           <Route
             exact={true}
+            path="/league/:leagueId/player/:playerId/stats"
+            render={playerStatsPage}
+          />
+          <Route
+            exact={true}
             path="/league/:leagueId/season/:seasonId/history"
             render={seasonHistoryPage}
           />

@@ -14,4 +14,21 @@
   & .player {
     width: 100px;
   }
+
+  & .row {
+    display: flex;
+    align-items: center;
+
+    & .th-card {
+      width: 50px;
+    }
+
+    & .abs {
+      width: 60px;
+    }
+
+    & .pct {
+      width: 100px;
+    }
+  }
 }

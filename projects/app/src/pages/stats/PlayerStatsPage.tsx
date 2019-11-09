@@ -58,7 +58,7 @@ export class PlayerStatsPage extends React.PureComponent<
           <div className="th-card">Runs</div>
           <div className="abs">{this.state.stats.runs}</div>
           <div className="pct">
-            {renderFraction(this.state.stats.hearts, this.state.stats.hands)}
+            {renderPercent(this.state.stats.runs, this.state.stats.hands, 2)}
           </div>
         </div>
         <div>Took (negative outcomes only)</div>
@@ -87,21 +87,37 @@ export class PlayerStatsPage extends React.PureComponent<
           <Card rank="" suit="HEARTS" />
           <div className="abs">{this.state.stats.hearts}</div>
           <div className="pct">
-            {renderFraction(this.state.stats.hearts, this.state.stats.hands)}
+            {renderFraction(this.state.stats.hearts, this.state.stats.hands)} / hand
           </div>
         </div>
         <div>Charged</div>
-        <div>
-          <Card rank="10" suit="CLUBS" /> {this.state.stats.tcCharges}
+        <div className="row">
+          <Card rank="10" suit="CLUBS" />
+          <div className="abs">{this.state.stats.tcCharges}</div>
+          <div className="pct">
+            {renderPercent(this.state.stats.tcCharges, this.state.stats.hands)}
+          </div>
         </div>
-        <div>
-          <Card rank="J" suit="DIAMONDS" /> {this.state.stats.jdCharges}
+        <div className="row">
+          <Card rank="J" suit="DIAMONDS" />
+          <div className="abs">{this.state.stats.jdCharges}</div>
+          <div className="pct">
+            {renderPercent(this.state.stats.jdCharges, this.state.stats.hands)}
+          </div>
         </div>
-        <div>
-          <Card rank="Q" suit="SPADES" /> {this.state.stats.qsCharges}
+        <div className="row">
+          <Card rank="Q" suit="SPADES" />
+          <div className="abs">{this.state.stats.qsCharges}</div>
+          <div className="pct">
+            {renderPercent(this.state.stats.qsCharges, this.state.stats.hands)}
+          </div>
         </div>
-        <div>
-          <Card rank="A" suit="HEARTS" /> {this.state.stats.ahCharges}
+        <div className="row">
+          <Card rank="A" suit="HEARTS" />
+          <div className="abs">{this.state.stats.ahCharges}</div>
+          <div className="pct">
+            {renderPercent(this.state.stats.ahCharges, this.state.stats.hands)}
+          </div>
         </div>
       </div>
     );
@@ -231,11 +247,11 @@ class PlayerStatsAnalysis implements IHandAnalysis<PlayerStats> {
     if (myHand.chargedTc) {
       current.tcCharges++;
     }
-    if (myHand.tookTc) {
+    if (myHand.tookTc && !ran) {
       current.tookTc++;
     }
-    if (myHand.hearts > 0 && !ran) {
-      current.hearts++;
+    if (!ran) {
+      current.hearts += myHand.hearts;
     }
     if (ran) {
       current.runs++;

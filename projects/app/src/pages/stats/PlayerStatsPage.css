@@ -31,4 +31,12 @@
       width: 100px;
     }
   }
+
+  & .section {
+    margin-bottom: 20px;
+  }
+
+  & h5 {
+    margin-bottom: 5px;
+  }
 }

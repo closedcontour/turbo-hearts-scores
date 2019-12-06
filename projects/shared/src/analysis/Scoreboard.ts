@@ -14,6 +14,7 @@ function emptyEntry(name: string) {
   return {
     name,
     games: 0,
+    hands: 0,
     totalDelta: 0,
   };
 }
@@ -36,6 +37,7 @@ export class Scoreboard implements IGameAnalysis<ScoreMap> {
         const entry =
           current[key] || emptyEntry(game.players.find(p => p!.id.toString() === key)!.name);
         entry.games++;
+        entry.hands += game.hands.length;
         entry.totalDelta += handSummary[key].totalDelta;
         current[key] = entry;
       }

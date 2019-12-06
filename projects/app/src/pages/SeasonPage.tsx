@@ -93,7 +93,7 @@ export class SeasonPage extends React.PureComponent<SeasonPageProps, SeasonPageS
       <div className="scoreboard">
         {values.map((value, i) => (
           <div key={value.name}>
-            {i === 0 && "👨‍🚀"} {i === values.length - 1 && "🐋"} {value.name} / {value.totalDelta}
+            {i === 0 && "👨‍🚀"} {i === values.length - 1 && "🐋"} {value.name} / {value.totalDelta} ({value.totalDelta / value.hands})
           </div>
         ))}
       </div>

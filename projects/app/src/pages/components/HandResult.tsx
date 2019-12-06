@@ -1,4 +1,5 @@
 import { getHandResult, IHand, IHandResult } from "@turbo-hearts-scores/shared";
+import { scoresToDelta } from "@turbo-hearts-scores/shared";
 import * as React from "react";
 
 interface HandResultProps {
@@ -22,10 +23,13 @@ export class HandResult extends React.PureComponent<HandResultProps, {}> {
   private renderHand(result: IHandResult) {
     return (
       <div className="th-hand-result">
-        {this.props.hand.playerHands.map((_playerHand, i) => {
+        {
+        const delta = scoresToDelta(result.scores);
+        this.props.hand.playerHands.map((_playerHand, i) => {
           return (
             <div key={i} className="score">
               {result.scores[i]} {result.moonshots[i] && "🚀"} {result.antiruns[i] && "💣"}
+              ({delta[i]})
             </div>
           );
         })}
